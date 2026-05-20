@@ -5,6 +5,7 @@ import os from 'os';
 import connectDB from './config/db.js';
 import authorRoutes from './routes/authorRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config({ quiet: true });
 
@@ -26,6 +27,8 @@ const routeDefs: RouteDef[] = [
 ];
 
 routeDefs.forEach(({ prefix, router }) => app.use(prefix, router));
+
+app.use(errorHandler);
 
 type RouteLayer = {
   route?: { path: string; methods: Record<string, boolean> };
