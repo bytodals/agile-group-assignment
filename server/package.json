@@ -2,34 +2,50 @@
   "name": "EnnaBook-server",
   "version": "1.0.0",
   "description": "Server for EnnaBook",
-  "main": "src/app.js",
+  "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
-    "dev": "nodemon --exec ts-node src/app.ts",
+    "dev": "nodemon --exec tsx src/app.ts",
     "build": "tsc",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "prepare": "cd .. && husky"
   },
   "keywords": [],
   "author": "Ida, Thelma, Johanna, Tom, Alexander",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mongoose": "^9.6.2"
   },
+  "lint-staged": {
+    "src/**/*.ts": ["prettier --write", "eslint --fix"]
+  },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
     "jest": "^30.4.2",
+    "jiti": "^2.7.0",
+    "lint-staged": "^17.0.5",
     "nodemon": "^3.1.14",
+    "prettier": "^3.8.3",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.10",
-    "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.4"
   }
 }
