@@ -4,8 +4,9 @@
   "description": "Server for EnnaBook",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "start": "node dist/app.js",
+    "dev": "nodemon --exec ts-node src/app.ts",
+    "build": "tsc",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "typecheck": "tsc --noEmit"
@@ -28,6 +29,7 @@
     "nodemon": "^3.1.14",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.10",
+    "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
   }
 }
