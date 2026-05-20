@@ -12,7 +12,10 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "paths": {
+      "@shared/*": ["../shared/types/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "eslint.config.js", "jest.config.ts"]
