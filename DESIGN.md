@@ -19,9 +19,8 @@ Colors
 
 - --color-brand: #1B3B36            — primary color
 - --color-brand-strong: #112723     — stronger brand variant
-- --color-brand-soft: #cfece6       — soft brand background
 - --color-secondary: #BC936A        — accent color (buttons, highlights)
-- --color-accent: alias in "./src/globals.css" for backwards compatibility
+- --color-accent: alias in "AnnaBook/src/globals.css" for backwards compatibility
 - --color-accent-strong: #7f5e3f
 - --color-accent-soft: #efd0ad
 - --color-surface: #faf7f2          — default page background
