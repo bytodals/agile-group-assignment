@@ -19,7 +19,7 @@ export default function HomePage() {
 
         <section className="hp-hero">
           <h2 className="hp-hero-title">Echoes of the Old World</h2>
-          <span className="hp-hero-tag">Book of the month</span>
+          <span className="hp-hero-badge">Book of the month</span>
           <p className="hp-hero-desc">A sweeping narrative that redefines our understanding of lost civilizations.</p>
         </section>
 
