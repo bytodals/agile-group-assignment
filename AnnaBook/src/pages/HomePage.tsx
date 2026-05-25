@@ -1,4 +1,4 @@
-import { Home, Search, Bookmark } from "lucide-react/dist/esm/lucide-react.mjs"
+import { Home, Search, Bookmark } from "lucide-react"
 
 export default function HomePage() {
   return (
