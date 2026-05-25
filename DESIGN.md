@@ -19,14 +19,14 @@ Colors
 
 - --color-brand: #1B3B36            — primary color
 - --color-brand-strong: #112723     — stronger brand variant
-- --color-secondary: #BC936A        — accent color (buttons, highlights)
-- --color-accent: alias in "AnnaBook/src/globals.css" for backwards compatibility
+- --color-brand-soft: #cfece6       — soft brand background
+- --color-secondary: #BC936A        — secondary/accent color
 - --color-accent-strong: #7f5e3f
 - --color-accent-soft: #efd0ad
-- --color-surface: #faf7f2          — default page background
-- --color-surface-raised: #ffffff   — elevated surface backgrounds
+- --color-surface: #FAF7F2          — default page background
+- --color-surface-raised: #FFFFFF   — elevated surface backgrounds
 - --color-surface-muted: #f0ece8
-- --color-border: #e6e1dd
+- --color-border: #E6E1DD
 - --color-text: #0F172A
 - --color-text-muted: #6B7280
 - --color-text-inverse: #FFFFFF
@@ -41,6 +41,12 @@ Spacing
 - --space-md: 16px
 - --space-lg: 24px
 - --space-xl: 32px
+- --space-md-plus: 12px
+- --space-lg-plus: 18px
+- --space-xl-plus: 20px
+- --space-2xl: 28px
+- --space-3xl: 40px
+- --space-4xl: 56px
 
 Radii
 
@@ -50,7 +56,10 @@ Radii
 
 Typography
 
-- --font-family: Hanken Grotesk, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial
+- --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+- --font-heading: "Literata", Georgia, "Times New Roman", serif
+- --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace
+- --font-size-base: 16px
 - --font-size-sm: 0.875rem
 - --font-size-md: 1rem
 - --font-size-lg: 1.125rem
@@ -58,6 +67,8 @@ Typography
 Application background token
 
 - --app-bg: var(--color-surface)
+- --app-bg: var(--color-surface)
+- --shadow: rgba(0,0,0,0.06) 0 8px 20px -8px
 
 How to use the tokens
 
