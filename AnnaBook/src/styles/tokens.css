@@ -53,4 +53,8 @@
   --spinner-size-small: 20px;
   --spinner-size-medium: 36px;
   --spinner-size-large: 56px;
+  /* Spinner color tokens */
+  --spinner-color-primary: var(--color-brand);
+  --spinner-color-secondary: var(--color-secondary);
+  --spinner-color-neutral: var(--color-text-muted);
 }
