@@ -6,6 +6,8 @@ export interface IAuthor extends Author, Document {}
 const AuthorSchema = new Schema<IAuthor>(
   {
     name: { type: String, required: true, trim: true },
+    olKey: { type: String, trim: true },
+    favorite: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
