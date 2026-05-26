@@ -1,0 +1,4 @@
+#!/bin/sh
+if [ -d "server/node_modules" ]; then
+  cd server && npx lint-staged
+fi
