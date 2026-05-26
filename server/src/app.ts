@@ -5,6 +5,7 @@ import os from 'os';
 import connectDB from './config/db.js';
 import authorRoutes from './routes/authorRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
+import openLibraryRoutes from './routes/openLibraryRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config({ quiet: true });
@@ -24,6 +25,7 @@ type RouteDef = { prefix: string; router: Router };
 const routeDefs: RouteDef[] = [
   { prefix: '/api/authors', router: authorRoutes },
   { prefix: '/api/books', router: bookRoutes },
+  { prefix: '/api/openlibrary', router: openLibraryRoutes },
 ];
 
 routeDefs.forEach(({ prefix, router }) => app.use(prefix, router));

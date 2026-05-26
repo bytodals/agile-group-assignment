@@ -53,3 +53,55 @@ export const createAuthor = async (
     next(err);
   }
 };
+
+export const updateFavorite = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const author = await authorService.updateFavorite(String(req.params.id), req.body.favorite);
+    if (!author) {
+      res.status(404).json({ message: 'Author not found' });
+      return;
+    }
+    res.json(author);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const addToFavorites = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { olKey, name } = req.body as { olKey: string; name: string };
+    if (!olKey || !name) {
+      res.status(400).json({ message: '"olKey" and "name" are required' });
+      return;
+    }
+    const author = await authorService.addToFavorites(olKey, name);
+    res.status(201).json(author);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const removeFromFavorites = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const deleted = await authorService.removeFromFavorites(String(req.params.id));
+    if (!deleted) {
+      res.status(404).json({ message: 'Author not found' });
+      return;
+    }
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};

@@ -5,6 +5,7 @@ export interface IBook extends Document {
   genre?: string;
   author: mongoose.Types.ObjectId;
   available: boolean;
+  favorite: boolean;
 }
 
 const BookSchema = new Schema<IBook>(
@@ -12,7 +13,9 @@ const BookSchema = new Schema<IBook>(
     title: { type: String, required: true, trim: true },
     genre: { type: String, trim: true },
     author: { type: Schema.Types.ObjectId, ref: 'Author', required: true },
+    olKey: { type: String, trim: true },
     available: { type: Boolean, default: true },
+    favorite: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
