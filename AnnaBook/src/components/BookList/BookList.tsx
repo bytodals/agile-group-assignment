@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import BookCard from "../BookCard/BookCard";
+import type { BookType } from "../types";
+//importera getBooks-funktion som hämtar alla böcker från API:et
 
 export default function BookList() {
-  // importera sen från Types
-  const [books, setBooks] = useState<Book[]>([]);
+  
+  const [books, setBooks] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // lägga i API-filen?
   useEffect(() => {
-    getBooks()
+    getBooks() //Funktionen är inte skapad än.
       .then(setBooks)
       .catch(() => setError("Kunde inte hämta böcker."))
       .finally(() => setLoading(false));
