@@ -1,35 +1,22 @@
-import HomePage from "./pages/HomePage"
-
-export default function App() {
-  return <HomePage />
-}
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
-import { LoadingSpinner } from './components/ui'
-import './App.css'
+import Spinner from './components/ui/Spinner'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
+    <> 
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
           <img src={reactLogo} className="framework" alt="React logo" />
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '12px',
-          }}
-        >
-          <LoadingSpinner size="large" text="Loading the library..." />
+        <div className="ui-spinner-wrapper">
+          <Spinner size="large" text="Loading the library..." />
           <p aria-live="polite">A reusable spinner is ready for page loads and actions.</p>
         </div>
         <div>
