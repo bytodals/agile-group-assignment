@@ -4,6 +4,7 @@ export interface IBook extends Document {
   title: string;
   genre?: string;
   author: mongoose.Types.ObjectId;
+  olKey?: string;
   available: boolean;
   favorite: boolean;
 }
