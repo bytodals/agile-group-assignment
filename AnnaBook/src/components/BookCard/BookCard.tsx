@@ -1,20 +1,14 @@
-import "./BookCard.modules.css";
+import type { Book } from "@shared/book";
 
-type BookCardProps = {
-  id: string;
-  title: string;
-  author: string;
-  coverUrl: string;
-};
+type BookCardProps = Book;
+//url till bokomslag?
 
-export default function BookCard({ title, author, coverUrl }: BookCardProps) {
+export default function BookCard({ title, author }: BookCardProps) {
   return (
-    <article className="book-card">
-      <img src={coverUrl} alt={title} />
-      <div className="book-card-content">
-        <h3 className="title">{title}</h3>
-        <p className="author">{author}</p>
-      </div>
+    <article className="hp-card">
+      <img src="https://placehold.co/200x300" alt={title} />
+      <h3>{title}</h3>
+      <p>{author}</p>
     </article>
   );
 }
