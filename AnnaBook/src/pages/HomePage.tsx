@@ -12,6 +12,7 @@ export default function HomePage() {
       </aside>
 
       <main className="hp-main">
+        
         <header className="hp-header">
           <button className="hp-menu" aria-label="open menu"><Home size={20} /></button>
           <h1 className="hp-brand">bookMoth</h1>

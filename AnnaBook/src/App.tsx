@@ -1,5 +1,7 @@
-import HomePage from "./pages/HomePage"
+import HomePage from './pages/HomePage'
 
-export default function App() {
+function App() {
   return <HomePage />
 }
+
+export default App

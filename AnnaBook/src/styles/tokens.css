@@ -48,4 +48,13 @@
 
   --app-bg: var(--color-surface);
   --shadow: rgba(0,0,0,0.06) 0 8px 20px -8px;
+
+  /* Spinner sizes */
+  --spinner-size-small: 20px;
+  --spinner-size-medium: 36px;
+  --spinner-size-large: 56px;
+  /* Spinner color tokens */
+  --spinner-color-primary: var(--color-brand);
+  --spinner-color-secondary: var(--color-secondary);
+  --spinner-color-neutral: var(--color-text-muted);
 }
