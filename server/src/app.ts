@@ -16,6 +16,17 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const ms = Date.now() - start;
+    console.log(
+      `[${new Date().toLocaleString('sv-SE')}] ${req.method} ${req.url} → ${res.statusCode} (${ms}ms)`,
+    );
+  });
+  next();
+});
+
 app.get('/', (_req, res) => {
   res.json({ message: 'EnnaBook API running' });
 });
