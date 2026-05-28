@@ -15,6 +15,9 @@
     "format": "prettier --write src",
     "format:check": "prettier --check src",
     "seed": "tsx src/seed.ts",
+    "seed:local": "cross-env USE_LOCAL_DB=true tsx src/seed.ts",
+    "export": "tsx src/export.ts",
+    "dev:local": "cross-env USE_LOCAL_DB=true nodemon --exec tsx src/app.ts",
     "prepare": "cd .. && husky"
   },
   "keywords": [],
@@ -38,6 +41,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
+    "cross-env": "^7.0.3",
     "eslint": "^10.4.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
