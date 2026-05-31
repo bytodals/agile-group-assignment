@@ -19,6 +19,7 @@ type DbBook = {
 //Funktion för att söka i bokdatabasen.
 export default async function searchDbBooks(searchWord : string): Promise<BookType[]> {
 
+  console.log("RUNNING NEW SEARCH FUNCTION");
   try {
     
     const encodedSearchWord = encodeURIComponent(searchWord);
