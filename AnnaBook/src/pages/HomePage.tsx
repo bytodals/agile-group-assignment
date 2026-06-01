@@ -1,5 +1,4 @@
 import { Home, Search, Bookmark } from "lucide-react"
-import BookSearch from "../components/BookSearch";
 
 export default function HomePage() {
   return (
@@ -25,7 +24,6 @@ export default function HomePage() {
           <p className="hp-hero-desc">A sweeping narrative that redefines our understanding of lost civilizations.</p>
         </section>
 
-        <BookSearch></BookSearch>
         <div className="hp-search">
           <div className="hp-search-box">
             <input placeholder="Search by title, author, or ISBN..." />
