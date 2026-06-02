@@ -53,7 +53,7 @@ export default function BookSearch() {
           ></input>
         </label>
 
-        {isLoading && <LoadingSpinner></LoadingSpinner>}
+        {isLoading && <LoadingSpinner/>}
 
         {isError && <p>"Errormeddelande"</p>}
 
