@@ -1,0 +1,6 @@
+node_modules
+AnnaBook/node_modules
+AnnaBook/dist
+server/node_modules
+server/dist
+server/coverage

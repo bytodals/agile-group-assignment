@@ -1,0 +1,87 @@
+{
+  "authors": [
+    {
+      "_id": "6a0d96e0bc210bfe8b001d90",
+      "name": "Astrid Lindgren",
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.072Z",
+      "updatedAt": "2026-05-20T11:11:28.072Z"
+    },
+    {
+      "_id": "6a0d96e0bc210bfe8b001d91",
+      "name": "Stieg Larsson",
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.072Z",
+      "updatedAt": "2026-05-20T11:11:28.072Z"
+    },
+    {
+      "_id": "6a0d96e0bc210bfe8b001d92",
+      "name": "Fredrik Backman",
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.072Z",
+      "updatedAt": "2026-05-20T11:11:28.072Z"
+    }
+  ],
+  "books": [
+    {
+      "_id": "6a0d96e0bc210bfe8b001d94",
+      "title": "Emil i Lönneberga",
+      "genre": "Barn",
+      "author": "6a0d96e0bc210bfe8b001d90",
+      "available": false,
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.118Z",
+      "updatedAt": "2026-05-20T11:11:28.118Z"
+    },
+    {
+      "_id": "6a0d96e0bc210bfe8b001d97",
+      "title": "En man som heter Ove",
+      "genre": "Skönlitteratur",
+      "author": "6a0d96e0bc210bfe8b001d92",
+      "available": false,
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.118Z",
+      "updatedAt": "2026-05-20T11:11:28.118Z"
+    },
+    {
+      "_id": "6a0d96e0bc210bfe8b001d98",
+      "title": "Anxious People",
+      "genre": "Skönlitteratur",
+      "author": "6a0d96e0bc210bfe8b001d92",
+      "available": true,
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.118Z",
+      "updatedAt": "2026-05-20T11:11:28.118Z"
+    },
+    {
+      "_id": "6a0d96e0bc210bfe8b001d93",
+      "title": "Pippi Långstrump",
+      "genre": "Barn",
+      "author": "6a0d96e0bc210bfe8b001d90",
+      "available": true,
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.118Z",
+      "updatedAt": "2026-05-20T11:11:28.118Z"
+    },
+    {
+      "_id": "6a0d96e0bc210bfe8b001d95",
+      "title": "Män som hatar kvinnor",
+      "genre": "Thriller",
+      "author": "6a0d96e0bc210bfe8b001d91",
+      "available": true,
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.118Z",
+      "updatedAt": "2026-05-20T11:11:28.118Z"
+    },
+    {
+      "_id": "6a0d96e0bc210bfe8b001d96",
+      "title": "Flickan som lekte med elden",
+      "genre": "Thriller",
+      "author": "6a0d96e0bc210bfe8b001d91",
+      "available": true,
+      "__v": 0,
+      "createdAt": "2026-05-20T11:11:28.118Z",
+      "updatedAt": "2026-05-20T11:11:28.118Z"
+    }
+  ]
+}
