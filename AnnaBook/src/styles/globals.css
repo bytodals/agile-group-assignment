@@ -161,6 +161,45 @@ p {
   outline: none;
 }
 
+.hp-search-results {
+  margin-top: var(--space-lg);
+}
+
+.hp-search-feedback {
+  margin-top: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.hp-search-feedback--error {
+  margin-top: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+}
+
+.hp-add-btn {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  width: 100%;
+  background: var(--color-brand);
+  color: var(--color-text-inverse);
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.hp-add-btn:hover:not(:disabled) {
+  background: var(--color-brand-strong);
+}
+
+.hp-add-btn:disabled {
+  background: var(--color-success);
+  cursor: default;
+}
+
 .hp-section {
   margin: calc(var(--space-lg) + 4px) 0;
 }

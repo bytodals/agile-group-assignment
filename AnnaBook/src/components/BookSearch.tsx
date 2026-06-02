@@ -24,7 +24,6 @@ export default function BookSearch() {
     }
   }
 
-  //Körs när man skriver nåt i sökrutan
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (searchWord.trim() !== '') {
@@ -34,10 +33,9 @@ export default function BookSearch() {
       }
     }, 400);
 
-    return () => clearTimeout(timeout); //rensar timeout om användaren skriver mer
+    return () => clearTimeout(timeout);
   }, [searchWord]);
 
-  //Använda BookCard-komponenten i listan nedan?
   return (
     <div>
       <label>
@@ -47,17 +45,17 @@ export default function BookSearch() {
 
       {isLoading && <LoadingSpinner />}
 
-      {isError && <p>"Errormeddelande"</p>}
+      {isError && <p className="hp-search-feedback--error">Book-search failed.</p>}
 
       {!isLoading && dbSearchResult?.length === 0 && searchWord?.length > 1 && (
-        <p>Inga böcker matchar ditt sökord</p>
+        <p className="hp-search-feedback">No books match your search term.</p>
       )}
 
       <ul>
         {dbSearchResult.map((book) => (
           <li key={book._id}>
             {book.title} {book.genre} {book.author.name}{' '}
-            {book.available ? 'Tillgänglig' : 'Utlånad'}
+            {book.available ? 'Available' : 'Checked out'}
           </li>
         ))}
       </ul>
