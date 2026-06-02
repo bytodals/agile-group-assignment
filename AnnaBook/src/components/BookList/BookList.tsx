@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import BookCard from "../BookCard/BookCard";
-//getBooks service
-import type { Book } from "@shared/book";
-import { Link } from "react-router-dom";
-import LoadingSpinner from "../ui/LoadingSpinner";
+import { useState, useEffect } from 'react';
+import BookCard from '../BookCard/BookCard';
+import { getBooks } from '../../services/api';
+import type { Book } from '@shared/book';
+import { Link } from 'react-router-dom';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 export default function BookList() {
   // importera sen från Types
@@ -15,7 +15,7 @@ export default function BookList() {
   useEffect(() => {
     getBooks()
       .then(setBooks)
-      .catch(() => setError("Kunde inte hämta böcker."))
+      .catch(() => setError('Kunde inte hämta böcker.'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -28,17 +28,13 @@ export default function BookList() {
   return (
     <ul style={{ padding: 0 }}>
       {books.map((book) => (
-        <li key={book.id} style={{ listStyle: "none" }}>
-          <Link
-            style={{ textDecoration: "none", color: "inherit" }}
-            to={`/books/${book.id}`}
-          >
+        <li key={book._id} style={{ listStyle: 'none' }}>
+          <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/books/${book._id}`}>
             <BookCard
-              key={book._id}
-              id={book.id}
               title={book.title}
-              author={book.author}
-              // coverUrl={book.coverUrl}
+              author={typeof book.author === 'object' ? book.author.name : book.author}
+              available={book.available}
+              favorite={false}
             />
           </Link>
         </li>

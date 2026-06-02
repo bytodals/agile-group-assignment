@@ -1,7 +1,10 @@
-import { Home, Search, Bookmark } from "lucide-react";
-import BookList from "../components/BookList/BookList";
+import { useState } from 'react';
+import { Home, Search, Bookmark } from 'lucide-react';
+import BookList from '../components/BookList/BookList';
+import OpenLibrarySearchResults from '../components/OpenLibrarySearchResults';
 
 export default function HomePage() {
+  const [searchQuery, setSearchQuery] = useState('');
   return (
     <div className="hp-root" data-sidebar-open="false">
       <aside className="hp-sidebar" aria-hidden>
@@ -19,7 +22,6 @@ export default function HomePage() {
       </aside>
 
       <main className="hp-main">
-        
         <header className="hp-header">
           <button className="hp-menu" aria-label="open menu">
             <Home size={20} />
@@ -31,18 +33,22 @@ export default function HomePage() {
           <h2 className="hp-hero-title">Echoes of the Old World</h2>
           <span className="hp-hero-badge">Book of the month</span>
           <p className="hp-hero-desc">
-            A sweeping narrative that redefines our understanding of lost
-            civilizations.
+            A sweeping narrative that redefines our understanding of lost civilizations.
           </p>
         </section>
 
         <div className="hp-search">
           <div className="hp-search-box">
-            <input placeholder="Search by title, author, or ISBN..." />
+            <input
+              placeholder="Search by title, author, or ISBN..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <button aria-label="search">
               <Search size={18} />
             </button>
           </div>
+          <OpenLibrarySearchResults query={searchQuery} />
         </div>
 
         <section className="hp-section">

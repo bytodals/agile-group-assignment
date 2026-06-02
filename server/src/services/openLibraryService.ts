@@ -13,6 +13,7 @@ export interface OLBook {
   authorOlKey?: string;
   authorName?: string;
   genre?: string;
+  coverId?: number;
 }
 
 function pickGenre(subjects?: string[]): string {
@@ -52,9 +53,10 @@ export async function searchBooks(query: string): Promise<OLBook[]> {
       author_key?: string[];
       author_name?: string[];
       subject?: string[];
+      cover_i?: number;
     }[];
   }>(
-    `${OL_BASE}/search.json?q=${encodeURIComponent(query)}&fields=key,title,author_key,author_name,subject&limit=10`,
+    `${OL_BASE}/search.json?q=${encodeURIComponent(query)}&fields=key,title,author_key,author_name,subject,cover_i&limit=10&mode=everything`,
   );
   return (data.docs ?? []).map((d) => ({
     olKey: d.key.replace('/works/', ''),
@@ -62,6 +64,7 @@ export async function searchBooks(query: string): Promise<OLBook[]> {
     authorOlKey: d.author_key?.[0],
     authorName: d.author_name?.[0],
     genre: pickGenre(d.subject),
+    coverId: d.cover_i,
   }));
 }
 
