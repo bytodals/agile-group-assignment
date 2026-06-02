@@ -8,7 +8,7 @@ import LoadingSpinner from "./ui/LoadingSpinner.tsx";
 export default function BookSearch() {
 
   const [isLoading, setIsLoading] = useState(false); 
-  const [isError, setIsError] = useState(false); //gör till egen komponent?
+  const [isError, setIsError] = useState(false); 
 
   const [searchWord, setSearchWord] = useState("");
   const [dbSearchResult, setDbSearchResult] = useState<BookType[]>([]);
