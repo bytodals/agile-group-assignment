@@ -1,7 +1,4 @@
 import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import prettierConfig from 'eslint-config-prettier'
 import { defineConfig, globalIgnores } from 'eslint/config'
@@ -10,17 +7,12 @@ import { baseIgnores, baseRules } from '../eslint.config.base.js'
 export default defineConfig([
   globalIgnores(baseIgnores),
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.ts'],
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
       prettierConfig,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
     ],
-    languageOptions: {
-      globals: globals.browser,
-    },
     rules: {
       ...baseRules,
     },
