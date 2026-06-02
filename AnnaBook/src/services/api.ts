@@ -1,13 +1,4 @@
-import type { BookType, AuthorType, SavedBooksResponse } from "../types";
-
-export type OLBook = {
-  olKey: string;
-  title: string;
-  authorOlKey?: string;
-  authorName?: string;
-  genre?: string;
-  coverId?: number;
-};
+import type { BookType, AuthorType, SavedBooksResponse } from '../types';
 
 // Is this only used here? If not, move it to the Types folder.
 type DbBook = {
@@ -20,8 +11,8 @@ type DbBook = {
   };
   available: boolean;
   favorite?: boolean;
-  createdAt: string; 
-  updatedAt: string; 
+  createdAt: string;
+  updatedAt: string;
 };
 
 type SavedBooksQuery = {
@@ -32,10 +23,10 @@ type SavedBooksQuery = {
 };
 
 async function parseJsonResponse<T>(response: Response, fallbackError: string): Promise<T> {
-  const contentType = response.headers.get("content-type") ?? "";
+  const contentType = response.headers.get('content-type') ?? '';
 
   if (!response.ok) {
-    if (contentType.includes("application/json")) {
+    if (contentType.includes('application/json')) {
       let errorMessage: string | undefined;
       try {
         const errorBody = (await response.json()) as { message?: string };
@@ -48,33 +39,31 @@ async function parseJsonResponse<T>(response: Response, fallbackError: string): 
     }
 
     const text = await response.text();
-    if (text.trimStart().startsWith("<")) {
-      throw new Error("Could not load data");
+    if (text.trimStart().startsWith('<')) {
+      throw new Error('Could not load data');
     }
 
     throw new Error(fallbackError);
   }
 
-  if (!contentType.includes("application/json")) {
+  if (!contentType.includes('application/json')) {
     const text = await response.text();
-    if (text.trimStart().startsWith("<")) {
-      throw new Error("Could not reach the API. Please make sure the backend server is running.");
+    if (text.trimStart().startsWith('<')) {
+      throw new Error('Could not reach the API. Please make sure the backend server is running.');
     }
 
-    throw new Error("Invalid response format from server.");
+    throw new Error('Invalid response format from server.');
   }
 
   try {
     return (await response.json()) as T;
   } catch {
-    throw new Error("Invalid data received from server.");
+    throw new Error('Invalid data received from server.');
   }
 }
 
-
 // Function for searching books in the database.
-export default async function searchDbBooks(searchWord : string): Promise<BookType[]> {
-
+export default async function searchDbBooks(searchWord: string): Promise<BookType[]> {
   try {
     const encodedSearchWord = encodeURIComponent(searchWord);
 
@@ -83,16 +72,16 @@ export default async function searchDbBooks(searchWord : string): Promise<BookTy
       fetch(`/api/authors/search?q=${encodedSearchWord}`),
     ]);
 
-    const books = await parseJsonResponse<DbBook[]>(booksRes, "Failed to search books");
-    const authors = await parseJsonResponse<AuthorType[]>(authorsRes, "Failed to search authors");
+    const books = await parseJsonResponse<DbBook[]>(booksRes, 'Failed to search books');
+    const authors = await parseJsonResponse<AuthorType[]>(authorsRes, 'Failed to search authors');
 
     // Fetch books for each matched author.
     const authorBooks = (
       await Promise.all(
         authors.map(async (author) => {
-        const res = await fetch(`/api/books/author/${author._id}`);
-        return await parseJsonResponse<DbBook[]>(res, "Failed to load books by author");
-  })
+          const res = await fetch(`/api/books/author/${author._id}`);
+          return await parseJsonResponse<DbBook[]>(res, 'Failed to load books by author');
+        }),
       )
     ).flat();
 
@@ -123,23 +112,23 @@ export async function searchOpenLibraryBooks(query: string): Promise<OLBook[]> {
 export async function fetchSavedBooks({
   page = 1,
   limit = 8,
-  query = "",
+  query = '',
   signal,
 }: SavedBooksQuery = {}): Promise<SavedBooksResponse> {
   const params = new URLSearchParams({ page: String(page), limit: String(limit) });
   if (query.trim()) {
-    params.set("q", query.trim());
+    params.set('q', query.trim());
   }
 
   const response = await fetch(`/api/books/favorites?${params.toString()}`, { signal });
 
-  return parseJsonResponse<SavedBooksResponse>(response, "Failed to load saved books");
+  return parseJsonResponse<SavedBooksResponse>(response, 'Failed to load saved books');
 }
 
 export async function removeSavedBook(bookId: string): Promise<void> {
-  const response = await fetch(`/api/books/${bookId}`, { method: "DELETE" });
+  const response = await fetch(`/api/books/${bookId}`, { method: 'DELETE' });
 
-  if (!response.ok && response.status !== 204) {
+  if (!response.ok) {
     throw new Error(`Failed to remove saved book (${response.status})`);
   }
 }

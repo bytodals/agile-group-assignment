@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { Bookmark, ChevronLeft, ChevronRight, Home, Search, Trash2 } from 'lucide-react';
-import BookList from '../components/BookList';
+import BookList from '../components/SavedBooksList';
 import { fetchSavedBooks, removeSavedBook } from '../services/api';
 import type { BookType } from '../types';
 
@@ -88,53 +88,61 @@ export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
       : `${totalItems} saved book${totalItems === 1 ? '' : 's'} in your account`;
   }, [searchQuery, totalItems]);
 
-  const handleRemoveBook = useCallback(async (book: BookType) => {
-    const confirmed = window.confirm(`Remove “${book.title}” from your saved books?`);
-    if (!confirmed) return;
+  const handleRemoveBook = useCallback(
+    async (book: BookType) => {
+      const confirmed = window.confirm(`Remove “${book.title}” from your saved books?`);
+      if (!confirmed) return;
 
-    const previousBooks = books;
-    // Optimistically remove locally for snappier UX
-    setRemovingId(book._id);
-    setBooks((current) => current.filter((b) => b._id !== book._id));
-    setTotalItems((n) => Math.max(0, n - 1));
+      const previousBooks = books;
+      setRemovingId(book._id);
+      setBooks((current) => current.filter((b) => b._id !== book._id));
+      setTotalItems((n) => Math.max(0, n - 1));
 
-    try {
-      await removeSavedBook(book._id);
+      try {
+        await removeSavedBook(book._id);
 
-      // Re-fetch to ensure pagination and totals are accurate
-      const result = await fetchSavedBooks({
-        page,
-        limit: PAGE_SIZE,
-        query: searchQuery,
-      });
+        const result = await fetchSavedBooks({
+          page,
+          limit: PAGE_SIZE,
+          query: searchQuery,
+        });
 
-      if (result.books.length === 0 && page > 1) {
-        setPage((current) => Math.max(1, current - 1));
-        return;
+        if (result.books.length === 0 && page > 1) {
+          setPage((current) => Math.max(1, current - 1));
+          return;
+        }
+
+        setBooks(result.books);
+        setTotalPages(result.totalPages);
+        setTotalItems(result.totalItems);
+
+        setError(null);
+      } catch (err) {
+        setBooks(previousBooks);
+        const message = err instanceof Error ? err.message : 'Failed to remove the book.';
+        setError(message);
+      } finally {
+        setRemovingId(null);
       }
-
-      setBooks(result.books);
-      setTotalPages(result.totalPages);
-      setTotalItems(result.totalItems);
-      setError(null);
-    } catch (err) {
-      // rollback on error
-      setBooks(previousBooks);
-      const message = err instanceof Error ? err.message : 'Failed to remove the book.';
-      setError(message);
-    } finally {
-      setRemovingId(null);
-    }
-  }, [books, page, searchQuery]);
+    },
+    [books, page, searchQuery],
+  );
 
   return (
     <div className="saved-books-page" data-sidebar-open="false">
       <aside className="saved-books-page__sidebar" aria-label="Primary">
         <nav className="saved-books-page__nav">
-          <button className="saved-books-page__nav-item" type="button" onClick={() => onNavigate('/')}>
+          <button
+            className="saved-books-page__nav-item"
+            type="button"
+            onClick={() => onNavigate('/')}
+          >
             <Home className="icon" size={18} /> Home
           </button>
-          <button className="saved-books-page__nav-item saved-books-page__nav-item--active" type="button">
+          <button
+            className="saved-books-page__nav-item saved-books-page__nav-item--active"
+            type="button"
+          >
             <Bookmark className="icon" size={18} /> Saved books
           </button>
         </nav>
@@ -146,7 +154,8 @@ export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
             <p className="saved-books-page__eyebrow">Your shelf</p>
             <h1 className="saved-books-page__title">Saved books</h1>
             <p className="saved-books-page__subtitle">
-              Review the books you’ve saved, search your shelf, and remove titles you’re no longer keeping.
+              Review the books you’ve saved, search your shelf, and remove titles you’re no longer
+              keeping.
             </p>
           </div>
 
