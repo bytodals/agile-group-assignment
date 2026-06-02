@@ -1,3 +1,5 @@
+import { logger } from '../utils/logger.js';
+
 const OL_BASE = 'https://openlibrary.org';
 
 export interface OLAuthor {
@@ -27,7 +29,11 @@ function pickGenre(subjects?: string[]): string {
 
 async function safeFetch<T>(url: string): Promise<T> {
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`OpenLibrary request failed (${url}): ${res.statusText}`);
+  if (!res.ok) {
+    const msg = `External API failed: GET ${url} → ${res.status} ${res.statusText}`;
+    logger.warn('openLibrary', msg);
+    throw new Error(msg);
+  }
   return res.json() as Promise<T>;
 }
 
