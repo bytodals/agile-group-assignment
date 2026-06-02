@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import  searchDbBooks  from "../services/api.ts";
 import type {BookType} from "../types";
+import LoadingSpinner from "./ui/LoadingSpinner.tsx";
 
 
 
 export default function BookSearch() {
 
-  const [isLoading, setIsLoading] = useState(false); //gör till egen komponent
-  const [isError, setIsError] = useState(false); //gör till egen komponent?
+  const [isLoading, setIsLoading] = useState(false); 
+  const [isError, setIsError] = useState(false); 
 
   const [searchWord, setSearchWord] = useState("");
   const [dbSearchResult, setDbSearchResult] = useState<BookType[]>([]);
@@ -45,14 +46,14 @@ export default function BookSearch() {
   return (
       <div>
         <label>
-          Sök böcker i databasen:
+          Sök böcker i databasen: 
           <input
             value={searchWord}
             onChange={(e) => setSearchWord(e.target.value)}
           ></input>
         </label>
 
-        {isLoading && <p>Laddar...</p>}
+        {isLoading && <LoadingSpinner/>}
 
         {isError && <p>"Errormeddelande"</p>}
 
@@ -64,8 +65,11 @@ export default function BookSearch() {
           {dbSearchResult.map((book) => (
               <li key={book._id}>
                 {book.title}
+                {" "}
                 {book.genre}
+                {" "}
                 {book.author.name}
+                {" "}
                 {book.available ? "Tillgänglig" : "Utlånad"}
               </li>
             ))}
