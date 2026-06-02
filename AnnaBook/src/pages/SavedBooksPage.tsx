@@ -1,16 +1,15 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bookmark, ChevronLeft, ChevronRight, Home, Search, Trash2 } from 'lucide-react';
 import BookList from '../components/SavedBooksList';
 import { fetchSavedBooks, removeSavedBook } from '../services/api';
 import type { BookType } from '../types';
 
-type SavedBooksPageProps = {
-  onNavigate: (path: string) => void;
-};
-
 const PAGE_SIZE = 8;
 
-export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
+export default function SavedBooksPage() {
+  const navigate = useNavigate();
+
   const [books, setBooks] = useState<BookType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -38,6 +37,7 @@ export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
       try {
         setIsLoading(true);
         setError(null);
+
         const result = await fetchSavedBooks({
           page,
           limit: PAGE_SIZE,
@@ -62,6 +62,7 @@ export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
         }
 
         const message = err instanceof Error ? err.message : 'Failed to load saved books.';
+
         setError(message);
       } finally {
         if (active) {
@@ -91,9 +92,11 @@ export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
   const handleRemoveBook = useCallback(
     async (book: BookType) => {
       const confirmed = window.confirm(`Remove “${book.title}” from your saved books?`);
+
       if (!confirmed) return;
 
       const previousBooks = books;
+
       setRemovingId(book._id);
       setBooks((current) => current.filter((b) => b._id !== book._id));
       setTotalItems((n) => Math.max(0, n - 1));
@@ -119,7 +122,9 @@ export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
         setError(null);
       } catch (err) {
         setBooks(previousBooks);
+
         const message = err instanceof Error ? err.message : 'Failed to remove the book.';
+
         setError(message);
       } finally {
         setRemovingId(null);
@@ -135,10 +140,11 @@ export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
           <button
             className="saved-books-page__nav-item"
             type="button"
-            onClick={() => onNavigate('/')}
+            onClick={() => navigate('/')}
           >
             <Home className="icon" size={18} /> Home
           </button>
+
           <button
             className="saved-books-page__nav-item saved-books-page__nav-item--active"
             type="button"
@@ -159,7 +165,7 @@ export default function SavedBooksPage({ onNavigate }: SavedBooksPageProps) {
             </p>
           </div>
 
-          <button className="saved-books-page__back" type="button" onClick={() => onNavigate('/')}>
+          <button className="saved-books-page__back" type="button" onClick={() => navigate('/')}>
             <Home size={18} /> Back
           </button>
         </header>
