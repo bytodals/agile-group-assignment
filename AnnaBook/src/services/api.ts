@@ -28,18 +28,22 @@ export default async function searchDbBooks(searchWord : string): Promise<BookTy
       fetch(`/api/authors/search?q=${encodedSearchWord}`),
     ]);
 
+    if (!booksRes.ok || !authorsRes.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
     const books = await booksRes.json() as DbBook[];
     const authors = await authorsRes.json() as AuthorType[];
 
     //hämtar böcker per matchad författare
-    const authorBooks = (
+    const authorBooks = authors.length > 0 ? (
       await Promise.all(
         authors.map(async (author) => {
         const res = await fetch(`/api/books/author/${author._id}`);
         return (await res.json()) as DbBook[];
   })
       )
-    ).flat();
+    ).flat() : [];
 
     //slå ihop och ta bort dubletter
     const allBooks = [...books, ...authorBooks];
