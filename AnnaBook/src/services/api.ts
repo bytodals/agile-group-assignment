@@ -10,7 +10,7 @@ export type OLBook = {
 };
 
 //Används den bara här? Annars, lägg i Types-mappen?
-type DbBook = {
+export type DbBook = {
   _id: string;
   title: string;
   genre?: string;
@@ -27,6 +27,16 @@ export async function getBooks(): Promise<DbBook[]> {
   const res = await fetch('/api/books');
   if (!res.ok) throw new Error('Failed to fetch books');
   return res.json() as Promise<DbBook[]>;
+}
+
+export async function getBookById(id: string): Promise<DbBook> {
+  const res = await fetch(`/api/books/${id}`);
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch book');
+  }
+
+  return res.json() as Promise<DbBook>;
 }
 
 //Funktion för att söka i bokdatabasen.
