@@ -17,8 +17,7 @@
     "seed": "tsx src/seed.ts",
     "seed:local": "cross-env USE_LOCAL_DB=true tsx src/seed.ts",
     "export": "tsx src/export.ts",
-    "dev:local": "cross-env USE_LOCAL_DB=true nodemon --exec tsx src/app.ts",
-    "prepare": "cd .. && husky"
+    "dev:local": "cross-env USE_LOCAL_DB=true nodemon --exec tsx src/app.ts"
   },
   "keywords": [],
   "author": "Ida, Thelma, Johanna, Tom, Alexander",
@@ -28,6 +27,8 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
     "mongoose": "^9.6.2"
   },
   "lint-staged": {
@@ -44,7 +45,6 @@
     "cross-env": "^7.0.3",
     "eslint": "^10.4.0",
     "eslint-config-prettier": "^10.1.8",
-    "husky": "^9.1.7",
     "jest": "^30.4.2",
     "jiti": "^2.7.0",
     "lint-staged": "^17.0.5",
