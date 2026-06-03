@@ -6,26 +6,7 @@ import BookDetailsPage from './pages/BookDetailsPage/BookDetailsPage';
 function App() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <HomePage
-            onNavigate={function (_path: string): void {
-              throw new Error('Function not implemented.');
-            }}
-          />
-        }
-      />
-      <Route
-        path="/"
-        element={
-          <HomePage
-            onNavigate={function (_path: string): void {
-              throw new Error('Function not implemented.');
-            }}
-          />
-        }
-      />
+      <Route path="/" element={<HomePage />} />
       <Route path="/saved-books" element={<SavedBooksPage />} />
       <Route path="/books/:id" element={<BookDetailsPage />} />
     </Routes>

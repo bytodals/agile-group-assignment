@@ -1,10 +1,9 @@
 import { Home, Search, Bookmark } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-type HomePageProps = {
-  onNavigate: (path: string) => void;
-};
+export default function HomePage() {
+  const navigate = useNavigate();
 
-export default function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="hp-root" data-sidebar-open="false">
       <aside className="hp-sidebar" aria-hidden>
@@ -12,10 +11,12 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <button className="hp-side-item">
             <Home className="icon" size={18} /> Home
           </button>
+
           <button className="hp-side-item">
             <Search className="icon" size={18} /> Search
           </button>
-          <button className="hp-side-item" type="button" onClick={() => onNavigate('/saved-books')}>
+
+          <button className="hp-side-item" type="button" onClick={() => navigate('/saved-books')}>
             <Bookmark className="icon" size={18} /> Shelf
           </button>
         </nav>
@@ -26,6 +27,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <button className="hp-menu" aria-label="open menu">
             <Home size={20} />
           </button>
+
           <h1 className="hp-brand">bookMoth</h1>
         </header>
 
@@ -40,6 +42,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="hp-search">
           <div className="hp-search-box">
             <input placeholder="Search by title, author, or ISBN..." />
+
             <button aria-label="search">
               <Search size={18} />
             </button>
@@ -48,6 +51,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
         <section className="hp-section">
           <h2 className="hp-section-title">New Arrivals</h2>
+
           <div className="hp-grid hp-grid-2">
             <div className="hp-card">The Silent Archive</div>
             <div className="hp-card">Urban Cartography</div>
@@ -56,6 +60,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
         <section className="hp-section">
           <h2 className="hp-section-title">Popular Genres</h2>
+
           <div className="hp-grid hp-grid-3">
             <div className="hp-card">Mystery</div>
             <div className="hp-card">Sci-Fi</div>
