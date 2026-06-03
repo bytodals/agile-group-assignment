@@ -22,6 +22,14 @@ export const searchBooks = asyncHandler(async (req, res) => {
   res.json(books);
 });
 
+export const getFavoriteBooks = asyncHandler(async (req, res) => {
+  const query = String(req.query.q ?? '');
+  const page = Number(req.query.page ?? 1);
+  const limit = Number(req.query.limit ?? 12);
+  const result = await bookService.getFavoriteBooks({ query, page, limit });
+  res.json(result);
+});
+
 export const getBooksByAuthor = asyncHandler(async (req, res) => {
   const books = await bookService.getBooksByAuthor(String(req.params.authorId));
   res.json(books);
