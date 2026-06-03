@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import { Home, Search, Bookmark } from 'lucide-react';
-import BookList from '../components/BookList/BookList';
-import OpenLibrarySearchResults from '../components/OpenLibrarySearchResults';
 
-export default function HomePage() {
-  const [searchQuery, setSearchQuery] = useState('');
+type HomePageProps = {
+  onNavigate: (path: string) => void;
+};
+
+export default function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="hp-root" data-sidebar-open="false">
       <aside className="hp-sidebar" aria-hidden>
@@ -15,7 +15,7 @@ export default function HomePage() {
           <button className="hp-side-item">
             <Search className="icon" size={18} /> Search
           </button>
-          <button className="hp-side-item">
+          <button className="hp-side-item" type="button" onClick={() => onNavigate('/saved-books')}>
             <Bookmark className="icon" size={18} /> Shelf
           </button>
         </nav>
@@ -39,22 +39,18 @@ export default function HomePage() {
 
         <div className="hp-search">
           <div className="hp-search-box">
-            <input
-              placeholder="Search by title, author, or ISBN..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <input placeholder="Search by title, author, or ISBN..." />
             <button aria-label="search">
               <Search size={18} />
             </button>
           </div>
-          <OpenLibrarySearchResults query={searchQuery} />
         </div>
 
         <section className="hp-section">
           <h2 className="hp-section-title">New Arrivals</h2>
           <div className="hp-grid hp-grid-2">
-            <BookList />
+            <div className="hp-card">The Silent Archive</div>
+            <div className="hp-card">Urban Cartography</div>
           </div>
         </section>
 

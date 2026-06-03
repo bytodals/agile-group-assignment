@@ -15,6 +15,76 @@ export const searchBooks = async (query: string): Promise<IBook[]> => {
   return Book.find({ $text: { $search: query } }).populate('author');
 };
 
+export const getFavoriteBooks = async ({
+  query = '',
+  page = 1,
+  limit = 12,
+}: {
+  query?: string;
+  page?: number;
+  limit?: number;
+}): Promise<{
+  books: IBook[];
+  totalItems: number;
+  totalPages: number;
+  page: number;
+  limit: number;
+}> => {
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  const safeLimit = Number.isFinite(limit) && limit > 0 ? Math.min(Math.floor(limit), 50) : 12;
+  const trimmedQuery = query.trim();
+
+  const favoriteQuery = { favorite: true } as Record<string, unknown>;
+
+  if (trimmedQuery) {
+    const [titleMatches, authorMatches] = await Promise.all([
+      Book.find({ ...favoriteQuery, $text: { $search: trimmedQuery } }).populate('author'),
+      Author.find({ name: { $regex: trimmedQuery, $options: 'i' } }).select('_id'),
+    ]);
+
+    const authorBooks = authorMatches.length
+      ? await Book.find({
+          ...favoriteQuery,
+          author: { $in: authorMatches.map((author) => author._id) },
+        }).populate('author')
+      : [];
+
+    const uniqueBooks = [...titleMatches, ...authorBooks].filter(
+      (book, index, arr) =>
+        arr.findIndex((candidate) => candidate._id.toString() === book._id.toString()) === index,
+    );
+
+    const sortedBooks = uniqueBooks.sort((a, b) => a.title.localeCompare(b.title));
+    const totalItems = sortedBooks.length;
+    const totalPages = Math.max(1, Math.ceil(totalItems / safeLimit));
+    const start = (safePage - 1) * safeLimit;
+
+    return {
+      books: sortedBooks.slice(start, start + safeLimit),
+      totalItems,
+      totalPages,
+      page: Math.min(safePage, totalPages),
+      limit: safeLimit,
+    };
+  }
+
+  const totalItems = await Book.countDocuments(favoriteQuery);
+  const totalPages = Math.max(1, Math.ceil(totalItems / safeLimit));
+  const books = await Book.find(favoriteQuery)
+    .populate('author')
+    .sort({ updatedAt: -1, title: 1 })
+    .skip((safePage - 1) * safeLimit)
+    .limit(safeLimit);
+
+  return {
+    books,
+    totalItems,
+    totalPages,
+    page: Math.min(safePage, totalPages),
+    limit: safeLimit,
+  };
+};
+
 export const getBooksByAuthor = async (authorId: string): Promise<IBook[]> => {
   return Book.find({ author: authorId }).populate('author').sort({ title: 1 });
 };

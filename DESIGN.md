@@ -99,6 +99,7 @@ Guidelines for changing tokens
 - Prefer additive changes — add new tokens rather than renaming or removing existing ones.
 - Keep token names semantic (color-purpose or spacing-size), not literal (avoid "--blue-1").
 - When changing a token's value, coordinate with the team and update this "DESIGN.md" with the rationale.
+- All code comments in the project should be written in English to keep team communication consistent.
 
 Adding a new token
 
