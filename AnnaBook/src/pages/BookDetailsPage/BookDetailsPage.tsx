@@ -2,7 +2,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import type { BookType } from '../../types';
 import { getBookById } from '../../services/api';
-import './BookDetailsPage.modules.css';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 export default function BookDetailsPage() {
@@ -38,8 +37,8 @@ export default function BookDetailsPage() {
   if (!book) return <p>Boken hittades inte.</p>;
 
   return (
-    <section className="book-details">
-      <button className="back-btn" onClick={() => navigate(-1)}>
+    <section className="book-details-section">
+      <button className="book-details-back-btn" onClick={() => navigate(-1)}>
         Back
       </button>
       <section className="book-details-card">
@@ -47,7 +46,7 @@ export default function BookDetailsPage() {
         <div className="book-details-content">
           <h2>{book.title}</h2>
           <p>
-            by <span className="author-link">{book.author.name}</span>
+            by <span className="book-details-author-link">{book.author.name}</span>
           </p>
         </div>
       </section>
