@@ -29,6 +29,13 @@ export async function getBooks(): Promise<DbBook[]> {
   return res.json() as Promise<DbBook[]>;
 }
 
+export async function getBookById(id: string): Promise<DbBook | null> {
+  const res = await fetch(`/api/books/${id}`);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error('Failed to fetch book');
+  return res.json() as Promise<DbBook>;
+}
+
 //Funktion för att söka i bokdatabasen.
 export default async function searchDbBooks(searchWord: string): Promise<BookType[]> {
   try {

@@ -1,15 +1,15 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import type { Book } from "@shared/book";
-//getBookById service
-import "./BookDetailsPage.modules.css";
-import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import type { BookType } from '../../types';
+import { getBookById } from '../../services/api';
+import './BookDetailsPage.modules.css';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 export default function BookDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [book, setBook] = useState<Book | null>(null);
+  const [book, setBook] = useState<BookType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,10 +26,10 @@ export default function BookDetailsPage() {
     return (
       <div
         style={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <LoadingSpinner />
@@ -43,15 +43,11 @@ export default function BookDetailsPage() {
         Back
       </button>
       <section className="book-details-card">
-        <img
-          src="https://placehold.co/200x300"
-          alt={book.title}
-          className="book-details-img"
-        />
+        <img src="https://placehold.co/200x300" alt={book.title} className="book-details-img" />
         <div className="book-details-content">
           <h2>{book.title}</h2>
           <p>
-            by <span className="author-link">{book.author}</span>
+            by <span className="author-link">{book.author.name}</span>
           </p>
         </div>
       </section>
