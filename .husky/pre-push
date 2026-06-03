@@ -1,0 +1,55 @@
+#!/bin/sh
+
+PASS=true
+
+if [ -d "AnnaBook/node_modules" ]; then
+  echo ""
+  echo "AnnaBook — type check..."
+  npm run typecheck --prefix AnnaBook
+  if [ $? -ne 0 ]; then
+    echo "✖ Type errors in AnnaBook — fix before pushing."
+    PASS=false
+  else
+    echo "✔ AnnaBook types OK"
+  fi
+
+  echo ""
+  echo "AnnaBook — format check..."
+  npm run format:check --prefix AnnaBook
+  if [ $? -ne 0 ]; then
+    echo "✖ Formatting errors in AnnaBook — run: cd AnnaBook && npm run format:check"
+    PASS=false
+  else
+    echo "✔ AnnaBook formatting OK"
+  fi
+fi
+
+if [ -d "server/node_modules" ]; then
+  echo ""
+  echo "server — type check..."
+  npm run typecheck --prefix server
+  if [ $? -ne 0 ]; then
+    echo "✖ Type errors in server — fix before pushing."
+    PASS=false
+  else
+    echo "✔ server types OK"
+  fi
+
+  echo ""
+  echo "server — format check..."
+  npm run format:check --prefix server
+  if [ $? -ne 0 ]; then
+    echo "✖ Formatting errors in server — run: cd server && npm run format:check"
+    PASS=false
+  else
+    echo "✔ server formatting OK"
+  fi
+fi
+
+echo ""
+if [ "$PASS" = false ]; then
+  echo "Push blocked — fix the errors above and try again."
+  exit 1
+fi
+
+echo "All checks passed — pushing."
