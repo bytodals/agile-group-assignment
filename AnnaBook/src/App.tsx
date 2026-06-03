@@ -26,7 +26,7 @@ function App() {
           />
         }
       />
-      <Route path="/my-books" element={<SavedBooksPage />} />
+      <Route path="/saved-books" element={<SavedBooksPage />} />
       <Route path="/books/:id" element={<BookDetailsPage />} />
     </Routes>
   );
