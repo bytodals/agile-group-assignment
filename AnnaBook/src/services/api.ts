@@ -136,7 +136,7 @@ export async function fetchSavedBooks({
 }
 
 export async function removeSavedBook(bookId: string): Promise<void> {
-  const response = await fetch(`/api/books/${bookId}`, {
+  const response = await fetch(`/api/books/${bookId}/favorite`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

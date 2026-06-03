@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { Home, Search, Bookmark } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import BookList from '../components/BookList/BookList';
+import OpenLibrarySearchResults from '../components/OpenLibrarySearchResults';
 
 export default function HomePage() {
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   return (
@@ -11,26 +15,21 @@ export default function HomePage() {
           <button className="hp-side-item">
             <Home className="icon" size={18} /> Home
           </button>
-
           <button className="hp-side-item">
             <Search className="icon" size={18} /> Search
           </button>
-
           <button className="hp-side-item" type="button" onClick={() => navigate('/saved-books')}>
             <Bookmark className="icon" size={18} /> Shelf
           </button>
         </nav>
       </aside>
-
       <main className="hp-main">
         <header className="hp-header">
           <button className="hp-menu" aria-label="open menu">
             <Home size={20} />
           </button>
-
           <h1 className="hp-brand">bookMoth</h1>
         </header>
-
         <section className="hp-hero">
           <h2 className="hp-hero-title">Echoes of the Old World</h2>
           <span className="hp-hero-badge">Book of the month</span>
@@ -38,29 +37,27 @@ export default function HomePage() {
             A sweeping narrative that redefines our understanding of lost civilizations.
           </p>
         </section>
-
         <div className="hp-search">
           <div className="hp-search-box">
-            <input placeholder="Search by title, author, or ISBN..." />
-
+            <input
+              placeholder="Search by title, author, or ISBN..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <button aria-label="search">
               <Search size={18} />
             </button>
           </div>
+          <OpenLibrarySearchResults query={searchQuery} />
         </div>
-
         <section className="hp-section">
           <h2 className="hp-section-title">New Arrivals</h2>
-
           <div className="hp-grid hp-grid-2">
-            <div className="hp-card">The Silent Archive</div>
-            <div className="hp-card">Urban Cartography</div>
+            <BookList />
           </div>
         </section>
-
         <section className="hp-section">
           <h2 className="hp-section-title">Popular Genres</h2>
-
           <div className="hp-grid hp-grid-3">
             <div className="hp-card">Mystery</div>
             <div className="hp-card">Sci-Fi</div>
