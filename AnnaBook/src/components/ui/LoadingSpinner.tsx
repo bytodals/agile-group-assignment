@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react';
 
-type Size = 'small' | 'medium' | 'large' | number
-type Variant = 'primary' | 'secondary' | 'neutral'
+type Size = 'small' | 'medium' | 'large' | number;
+type Variant = 'primary' | 'secondary' | 'neutral';
 
 interface LoadingSpinnerProps {
-  size?: Size
-  variant?: Variant
-  label?: string
-  overlay?: boolean
-  className?: string
+  size?: Size;
+  variant?: Variant;
+  label?: string;
+  overlay?: boolean;
+  className?: string;
 }
 
-const sizeClass = (size: Size) => (typeof size === 'number' ? '' : `ui-spinner--${size}`)
+const sizeClass = (size: Size) => (typeof size === 'number' ? '' : `ui-spinner--${size}`);
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'medium',
@@ -20,10 +20,11 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   overlay = false,
   className = '',
 }) => {
-  const modifier = sizeClass(size)
-  const variantClass = `ui-spinner--variant-${variant}`
+  const modifier = sizeClass(size);
+  const variantClass = `ui-spinner--variant-${variant}`;
 
-  const svgStyle = typeof size === 'number' ? { width: `${size}px`, height: `${size}px` } : undefined
+  const svgStyle =
+    typeof size === 'number' ? { width: `${size}px`, height: `${size}px` } : undefined;
 
   return (
     <div
@@ -31,14 +32,17 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       role={overlay ? 'status' : 'status'}
       aria-live="polite"
     >
-      <div className={`ui-spinner ${modifier} ${variantClass} ${className}`.trim()} aria-label={label ?? 'Loading'}>
+      <div
+        className={`ui-spinner ${modifier} ${variantClass} ${className}`.trim()}
+        aria-label={label ?? 'Loading'}
+      >
         <svg viewBox="0 0 50 50" style={svgStyle} aria-hidden="true" focusable="false">
           <circle className="ui-spinner__circle" cx="25" cy="25" r="20" />
         </svg>
         {label ? <span className="ui-spinner__label">{label}</span> : null}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoadingSpinner
+export default LoadingSpinner;

@@ -1,4 +1,4 @@
-import type { Book } from "@shared/book";
+import type { Book } from '@shared/book';
 
 type BookCardProps = Book;
 //url till bokomslag?
