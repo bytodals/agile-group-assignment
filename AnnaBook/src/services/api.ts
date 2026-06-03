@@ -9,7 +9,7 @@ export type OLBook = {
   coverId?: number;
 };
 
-type DbBook = {
+export type DbBook = {
   _id: string;
   title: string;
   genre?: string;
@@ -35,113 +35,84 @@ async function parseJsonResponse<T>(response: Response, fallbackError: string): 
 
   if (!response.ok) {
     if (contentType.includes('application/json')) {
-      let errorMessage: string | undefined;
-
       try {
         const errorBody = (await response.json()) as {
           message?: string;
         };
 
-        errorMessage = errorBody.message;
+        throw new Error(errorBody.message ?? fallbackError);
       } catch {
-        // Fall back to generic error below.
+        throw new Error(fallbackError);
       }
-
-      throw new Error(errorMessage ?? fallbackError);
-    }
-
-    const text = await response.text();
-
-    if (text.trimStart().startsWith('<')) {
-      throw new Error('Could not load data');
     }
 
     throw new Error(fallbackError);
   }
 
   if (!contentType.includes('application/json')) {
-    const text = await response.text();
-
-    if (text.trimStart().startsWith('<')) {
-      throw new Error('Could not reach the API. Please make sure the backend server is running.');
-    }
-
     throw new Error('Invalid response format from server.');
   }
 
-  try {
-    return (await response.json()) as T;
-  } catch {
-    throw new Error('Invalid data received from server.');
-  }
+  return (await response.json()) as T;
+}
+
+export async function getBooks(): Promise<DbBook[]> {
+  const response = await fetch('/api/books');
+
+  return parseJsonResponse<DbBook[]>(response, 'Failed to fetch books');
 }
 
 export async function getBookById(id: string): Promise<DbBook | null> {
-  const res = await fetch(`/api/books/${id}`);
+  const response = await fetch(`/api/books/${id}`);
 
-  if (res.status === 404) {
+  if (response.status === 404) {
     return null;
   }
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch book');
-  }
-
-  return res.json() as Promise<DbBook>;
+  return parseJsonResponse<DbBook>(response, 'Failed to fetch book');
 }
 
 export default async function searchDbBooks(searchWord: string): Promise<BookType[]> {
-  try {
-    const encodedSearchWord = encodeURIComponent(searchWord);
+  const encodedSearchWord = encodeURIComponent(searchWord);
 
-    const [booksRes, authorsRes] = await Promise.all([
-      fetch(`/api/books/search?q=${encodedSearchWord}`),
-      fetch(`/api/authors/search?q=${encodedSearchWord}`),
-    ]);
+  const [booksRes, authorsRes] = await Promise.all([
+    fetch(`/api/books/search?q=${encodedSearchWord}`),
+    fetch(`/api/authors/search?q=${encodedSearchWord}`),
+  ]);
 
-    const books = await parseJsonResponse<DbBook[]>(booksRes, 'Failed to search books');
+  const books = await parseJsonResponse<DbBook[]>(booksRes, 'Failed to search books');
 
-    const authors = await parseJsonResponse<AuthorType[]>(authorsRes, 'Failed to search authors');
+  const authors = await parseJsonResponse<AuthorType[]>(authorsRes, 'Failed to search authors');
 
-    // Fetch books for each matched author.
-    const authorBooks = (
-      await Promise.all(
-        authors.map(async (author) => {
-          const res = await fetch(`/api/books/author/${author._id}`);
+  // Fetch books for each matched author.
+  const authorBooks = (
+    await Promise.all(
+      authors.map(async (author) => {
+        const response = await fetch(`/api/books/author/${author._id}`);
 
-          return await parseJsonResponse<DbBook[]>(res, 'Failed to load books by author');
-        }),
-      )
-    ).flat();
+        return parseJsonResponse<DbBook[]>(response, 'Failed to load books by author');
+      }),
+    )
+  ).flat();
 
-    // Merge results and remove duplicates.
-    const allBooks = [...books, ...authorBooks];
+  // Merge results and remove duplicates.
+  const uniqueBooks = [...books, ...authorBooks].filter(
+    (book, index, array) => array.findIndex((b) => b._id === book._id) === index,
+  );
 
-    const uniqueResult = allBooks.filter(
-      (book, index, array) => array.findIndex((x) => x._id === book._id) === index,
-    );
-
-    return uniqueResult.map((book) => ({
-      _id: book._id,
-      title: book.title,
-      genre: book.genre,
-      author: book.author,
-      available: book.available,
-    }));
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  return uniqueBooks.map((book) => ({
+    _id: book._id,
+    title: book.title,
+    genre: book.genre,
+    author: book.author,
+    available: book.available,
+  }));
 }
 
 export async function searchOpenLibraryBooks(query: string): Promise<OLBook[]> {
-  const res = await fetch(`/api/openlibrary/books?q=${encodeURIComponent(query)}`);
+  const response = await fetch(`/api/openlibrary/books?q=${encodeURIComponent(query)}`);
 
-  if (!res.ok) {
-    throw new Error('Open Library search failed');
-  }
-
-  return res.json() as Promise<OLBook[]>;
+  return parseJsonResponse<OLBook[]>(response, 'Open Library search failed');
 }
 
 export async function fetchSavedBooks({
@@ -181,7 +152,7 @@ export async function removeSavedBook(bookId: string): Promise<void> {
 }
 
 export async function addBookToShelf(book: OLBook): Promise<void> {
-  const res = await fetch('/api/books/favorite', {
+  const response = await fetch('/api/books/favorite', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -189,7 +160,7 @@ export async function addBookToShelf(book: OLBook): Promise<void> {
     body: JSON.stringify(book),
   });
 
-  if (!res.ok) {
+  if (!response.ok) {
     throw new Error('Failed to add book to shelf');
   }
 }
