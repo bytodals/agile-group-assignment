@@ -7,12 +7,6 @@ const SEVERITY_ICON: Record<MessageSeverity, typeof AlertCircle> = {
   info: Info,
 };
 
-const SEVERITY_LABEL: Record<MessageSeverity, string> = {
-  error: 'Error',
-  warning: 'Warning',
-  info: 'Information',
-};
-
 export default function ErrorMessage({
   children,
   title,
@@ -54,7 +48,7 @@ export default function ErrorMessage({
           type="button"
           className="ui-message__dismiss"
           onClick={onDismiss}
-          aria-label={`Dismiss ${SEVERITY_LABEL[severity].toLowerCase()}`}
+          aria-label="Dismiss message"
         >
           <X size={16} aria-hidden="true" />
         </button>

@@ -659,9 +659,9 @@ p {
     }
 
 /* ------------------------------------------------------------------
-        UI primitives — Message (ErrorMessage component)
-        All values resolve to tokens in tokens.css.
-       ------------------------------------------------------------------ */
+   UI primitives — Message (ErrorMessage component)
+   All values resolve to tokens in tokens.css.
+   ------------------------------------------------------------------ */
 .ui-message {
   --message-fg: var(--color-danger);
   --message-bg: transparent;
