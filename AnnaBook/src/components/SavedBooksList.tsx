@@ -22,9 +22,11 @@ export default function BookList({
 
   if (error) {
     return (
-      <ErrorMessage variant="block" title="We couldn’t load your books">
-        {error}
-      </ErrorMessage>
+      <section className="book-list__state">
+        <ErrorMessage variant="block" title="We couldn’t load your books">
+          {error}
+        </ErrorMessage>
+      </section>
     );
   }
 
