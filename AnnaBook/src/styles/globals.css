@@ -171,12 +171,6 @@ p {
   color: var(--color-text-muted);
 }
 
-.hp-search-feedback--error {
-  margin-top: var(--space-md);
-  font-size: var(--font-size-sm);
-  color: var(--color-danger);
-}
-
 .hp-add-btn {
   margin-top: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
@@ -550,15 +544,9 @@ p {
       padding: var(--space-xl);
     }
 
-    .book-list__state--empty,
-    .book-list__state--error {
+    .book-list__state--empty {
       gap: var(--space-md);
       color: var(--color-text-muted);
-    }
-
-    .book-list__state--error h2 {
-      color: var(--color-brand-strong);
-      font-size: var(--font-size-lg);
     }
 
     .book-list__summary {
@@ -669,3 +657,123 @@ p {
       opacity: 0.55;
       cursor: not-allowed;
     }
+
+/* ------------------------------------------------------------------
+        UI primitives — Message (ErrorMessage component)
+        All values resolve to tokens in tokens.css.
+       ------------------------------------------------------------------ */
+.ui-message {
+  --message-fg: var(--color-danger);
+  --message-bg: transparent;
+  --message-border: transparent;
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  color: var(--message-fg);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+}
+
+.ui-message--error {
+  --message-fg: var(--color-danger);
+  --message-bg: var(--color-danger-soft);
+  --message-border: var(--color-danger);
+}
+
+.ui-message--warning {
+  --message-fg: var(--color-warning);
+  --message-bg: var(--color-warning-soft);
+  --message-border: var(--color-warning);
+}
+
+.ui-message--info {
+  --message-fg: var(--color-info);
+  --message-bg: var(--color-info-soft);
+  --message-border: var(--color-info);
+}
+
+.ui-message--inline {
+  margin-top: var(--space-md);
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.ui-message--block {
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--message-bg);
+  border: 1px solid var(--message-border);
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+  box-shadow: var(--shadow);
+}
+
+.ui-message__icon {
+  flex-shrink: 0;
+  color: var(--message-fg);
+  width: var(--space-md);
+  height: var(--space-md);
+  margin-top: 2px;
+}
+
+.ui-message--block .ui-message__icon {
+  width: var(--space-lg-plus);
+  height: var(--space-lg-plus);
+  margin-top: 0;
+}
+
+.ui-message__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+  min-width: 0;
+}
+
+.ui-message__title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-brand-strong);
+}
+
+.ui-message__body {
+  color: var(--color-text);
+  line-height: 1.45;
+}
+
+.ui-message--inline .ui-message__body {
+  color: var(--message-fg);
+}
+
+.ui-message__actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.ui-message__dismiss {
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ui-message__dismiss:hover,
+.ui-message__dismiss:focus-visible {
+  color: var(--color-text);
+  background: var(--color-surface-muted);
+}
+
+.ui-message__dismiss:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
