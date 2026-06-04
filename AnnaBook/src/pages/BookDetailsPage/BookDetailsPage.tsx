@@ -15,8 +15,17 @@ export default function BookDetailsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
     let active = true;
+
+    setBook(null);
+    setError(null);
+    setLoading(true);
+
+    if (!id) {
+      setError('The book you are looking for could not be found.');
+      setLoading(false);
+      return;
+    }
 
     const loadBook = async () => {
       try {
