@@ -42,11 +42,7 @@ export default function ErrorMessage({
 
         {onRetry ? (
           <div className="ui-message__actions">
-            <button
-              type="button"
-              className="ui-button ui-button--ghost"
-              onClick={onRetry}
-            >
+            <button type="button" className="ui-button ui-button--ghost" onClick={onRetry}>
               <RefreshCw size={16} aria-hidden="true" /> Try again
             </button>
           </div>
