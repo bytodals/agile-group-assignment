@@ -1,17 +1,7 @@
-import type { ReactNode } from 'react';
 import { BookmarkCheck, BookOpen, CalendarClock, User } from 'lucide-react';
-import type { BookType } from '../types';
+import type { SavedBooksListProps } from '../types';
 import LoadingSpinner from './ui/LoadingSpinner';
-
-type BookListProps = {
-  books: BookType[];
-  emptyState: string;
-  isLoading?: boolean;
-  error?: string | null;
-  loadingLabel?: string;
-  renderActions?: (book: BookType) => ReactNode;
-  summary?: string;
-};
+import ErrorMessage from './ui/ErrorMessage';
 
 export default function BookList({
   books,
@@ -21,7 +11,7 @@ export default function BookList({
   loadingLabel = 'Loading books...',
   renderActions,
   summary,
-}: BookListProps) {
+}: SavedBooksListProps) {
   if (isLoading) {
     return (
       <div className="ui-spinner-wrapper book-list__state">
@@ -32,10 +22,9 @@ export default function BookList({
 
   if (error) {
     return (
-      <section className="book-list__state book-list__state--error" role="alert">
-        <h2>We couldn’t load your books</h2>
-        <p>{error}</p>
-      </section>
+      <ErrorMessage variant="block" title="We couldn’t load your books">
+        {error}
+      </ErrorMessage>
     );
   }
 
