@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export type BookType = {
   _id: string;
   title: string;
@@ -19,3 +21,41 @@ export type SavedBooksResponse = {
   page: number;
   limit: number;
 };
+
+export type MessageSeverity = 'error' | 'warning' | 'info';
+export type MessageVariant = 'inline' | 'block';
+
+export interface ErrorMessageProps {
+  children: ReactNode;
+  title?: string;
+  variant?: MessageVariant;
+  severity?: MessageSeverity;
+  onRetry?: () => void;
+  onDismiss?: () => void;
+  className?: string;
+}
+
+export type LoadingSpinnerSize = 'small' | 'medium' | 'large' | number;
+export type LoadingSpinnerVariant = 'primary' | 'secondary' | 'neutral';
+
+export interface LoadingSpinnerProps {
+  size?: LoadingSpinnerSize;
+  variant?: LoadingSpinnerVariant;
+  label?: string;
+  overlay?: boolean;
+  className?: string;
+}
+
+export interface OpenLibrarySearchResultsProps {
+  query: string;
+}
+
+export interface SavedBooksListProps {
+  books: BookType[];
+  emptyState: string;
+  isLoading?: boolean;
+  error?: string | null;
+  loadingLabel?: string;
+  renderActions?: (book: BookType) => ReactNode;
+  summary?: string;
+}

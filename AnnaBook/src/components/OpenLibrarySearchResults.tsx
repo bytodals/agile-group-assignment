@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { searchOpenLibraryBooks, addBookToShelf, type OLBook } from '../services/api';
 import LoadingSpinner from './ui/LoadingSpinner';
+import ErrorMessage from './ui/ErrorMessage';
+import type { OpenLibrarySearchResultsProps } from '../types';
 
-type Props = { query: string };
-
-export default function OpenLibrarySearchResults({ query }: Props) {
+export default function OpenLibrarySearchResults({ query }: OpenLibrarySearchResultsProps) {
   const [results, setResults] = useState<OLBook[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -41,7 +41,7 @@ export default function OpenLibrarySearchResults({ query }: Props) {
 
   if (!query.trim()) return null;
   if (loading) return <LoadingSpinner />;
-  if (error) return <p className="hp-search-feedback--error">Book-search failed.</p>;
+  if (error) return <ErrorMessage>Book-search failed.</ErrorMessage>;
   if (results.length === 0)
     return <p className="hp-search-feedback">No books found for &quot;{query}&quot;.</p>;
 
