@@ -1,17 +1,8 @@
 import React from 'react';
+import type { LoadingSpinnerProps, LoadingSpinnerSize } from '../../types';
 
-type Size = 'small' | 'medium' | 'large' | number;
-type Variant = 'primary' | 'secondary' | 'neutral';
-
-interface LoadingSpinnerProps {
-  size?: Size;
-  variant?: Variant;
-  label?: string;
-  overlay?: boolean;
-  className?: string;
-}
-
-const sizeClass = (size: Size) => (typeof size === 'number' ? '' : `ui-spinner--${size}`);
+const sizeClass = (size: LoadingSpinnerSize) =>
+  typeof size === 'number' ? '' : `ui-spinner--${size}`;
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'medium',

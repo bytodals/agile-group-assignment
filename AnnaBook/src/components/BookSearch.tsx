@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import searchDbBooks from '../services/api.ts';
 import type { BookType } from '../types';
 import LoadingSpinner from './ui/LoadingSpinner.tsx';
+import ErrorMessage from './ui/ErrorMessage.tsx';
 
 export default function BookSearch() {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +46,7 @@ export default function BookSearch() {
 
       {isLoading && <LoadingSpinner />}
 
-      {isError && <p className="hp-search-feedback--error">Book-search failed.</p>}
+      {isError && <ErrorMessage>Book-search failed.</ErrorMessage>}
 
       {!isLoading && dbSearchResult?.length === 0 && searchWord?.length > 1 && (
         <p className="hp-search-feedback">No books match your search term.</p>

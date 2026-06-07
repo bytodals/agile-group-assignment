@@ -4,6 +4,7 @@ import { getBooks } from '../../services/api';
 import type { BookType } from '../../types';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../ui/LoadingSpinner';
+import ErrorMessage from '../ui/ErrorMessage';
 
 export default function BookList() {
   const [books, setBooks] = useState<BookType[]>([]);
@@ -13,13 +14,13 @@ export default function BookList() {
   useEffect(() => {
     getBooks()
       .then(setBooks)
-      .catch(() => setError('Kunde inte hämta böcker.'))
+      .catch(() => setError("We couldn't load the books."))
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <p>{error}</p>;
-  if (books.length === 0) return <p>Inga böcker hittades.</p>;
+  if (error) return <ErrorMessage>{error}</ErrorMessage>;
+  if (books.length === 0) return <p>No books found.</p>;
 
   return (
     <ul style={{ padding: 0 }}>

@@ -109,9 +109,9 @@ export const addToFavorites = async (data: {
   genre?: string;
 }): Promise<IBook> => {
   let authorId;
-  if (data.authorOlKey && data.authorName) {
+  if (data.authorName) {
     const author = await Author.findOneAndUpdate(
-      { olKey: data.authorOlKey },
+      data.authorOlKey ? { olKey: data.authorOlKey } : { name: data.authorName },
       { name: data.authorName, olKey: data.authorOlKey },
       { upsert: true, new: true },
     );

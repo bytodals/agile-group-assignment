@@ -3,23 +3,54 @@ import { useEffect, useState } from 'react';
 import type { BookType } from '../../types';
 import { getBookById } from '../../services/api';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import ErrorMessage from '../../components/ui/ErrorMessage';
 
 export default function BookDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [prevId, setPrevId] = useState(id);
   const [book, setBook] = useState<BookType | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!!id);
+  const [error, setError] = useState<string | null>(
+    id ? null : 'The book you are looking for could not be found.',
+  );
+
+  if (prevId !== id) {
+    setPrevId(id);
+    setBook(null);
+    setError(id ? null : 'The book you are looking for could not be found.');
+    setLoading(!!id);
+  }
 
   useEffect(() => {
     if (!id) return;
-    getBookById(id)
-      .then((data) => {
+    let active = true;
+
+    const loadBook = async () => {
+      try {
+        const data = await getBookById(id);
+        if (!active) return;
         if (data) {
           setBook(data);
+          setError(null);
+        } else {
+          setError('The book you are looking for could not be found.');
         }
-      })
-      .finally(() => setLoading(false));
+      } catch (err) {
+        if (!active) return;
+        const message = err instanceof Error ? err.message : 'Failed to load this book.';
+        setError(message);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    void loadBook();
+
+    return () => {
+      active = false;
+    };
   }, [id]);
   if (loading)
     return (
@@ -34,7 +65,18 @@ export default function BookDetailsPage() {
         <LoadingSpinner />
       </div>
     );
-  if (!book) return <p>Boken hittades inte.</p>;
+  if (error || !book) {
+    return (
+      <section className="book-details">
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          Back
+        </button>
+        <ErrorMessage variant="block" title="Book not found">
+          {error ?? 'The book you are looking for could not be found.'}
+        </ErrorMessage>
+      </section>
+    );
+  }
 
   return (
     <section className="book-details-section">

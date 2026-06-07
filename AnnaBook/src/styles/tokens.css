@@ -19,7 +19,11 @@
 
   --color-success: #10B981;
   --color-danger: #EF4444;
+  --color-danger-soft: #FEF2F2;
   --color-warning: #F59E0B;
+  --color-warning-soft: #FFFBEB;
+  --color-info: #3B82F6;
+  --color-info-soft: #EFF6FF;
 
   --space-xs: 4px;
   --space-sm: 8px;
