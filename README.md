@@ -35,28 +35,43 @@ A modern full-stack book discovery and personal library web application. Users c
 
 ## Project Structure
 
+## 📁 Project Structure
+
 ```bash
 agile-group-assignment/
-├── AnnaBook/                  # React frontend
+├── AnnaBook/                      # React Frontend
+│   ├── public/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
 │   │   ├── styles/
+│   │   ├── hooks/
+│   │   ├── utils/
 │   │   └── main.tsx
+│   ├── vite.config.ts
 │   └── package.json
-├── server/                    # Express backend
+│
+├── server/                        # Express Backend
 │   ├── src/
-│   │   ├── routes/
-│   │   ├── models/
-│   │   ├── controllers/
-│   │   └── server.ts
+│   │   ├── config/                # Database, environment config
+│   │   ├── controllers/           # Request handlers
+│   │   ├── models/                # Mongoose schemas
+│   │   ├── routes/                # Express route definitions
+│   │   ├── middleware/            # Auth, error handling, validation
+│   │   ├── services/              # Business logic (Open Library API, etc.)
+│   │   ├── utils/
+│   │   └── server.ts              # Entry point
+│   ├── .env.example
 │   └── package.json
+│
 ├── shared/
-│   └── types/                 # Shared TypeScript definitions
+│   └── types/                     # Shared TypeScript interfaces
+│
 ├── DESIGN.md
 ├── README.md
-├── package.json               # Root scripts
-└── .env.example
+├── package.json                   # Root (for concurrently, linting, etc.)
+└── .gitignore
+````
 
 ##  Getting Started
 
