@@ -1,15 +1,14 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Bookmark, ChevronLeft, ChevronRight, Home, Search, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, Trash2 } from 'lucide-react';
 import BookList from '../components/SavedBooksList';
+import TopBar from '../components/TopBar/TopBar';
+import Reveal from '../components/motion/Reveal';
 import { fetchSavedBooks, removeSavedBook } from '../services/api';
 import type { BookType } from '../types';
 
 const PAGE_SIZE = 8;
 
 export default function SavedBooksPage() {
-  const navigate = useNavigate();
-
   const [books, setBooks] = useState<BookType[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -45,9 +44,7 @@ export default function SavedBooksPage() {
           signal: controller.signal,
         });
 
-        if (!active) {
-          return;
-        }
+        if (!active) return;
 
         setBooks(result.books);
         setTotalPages(result.totalPages);
@@ -57,17 +54,11 @@ export default function SavedBooksPage() {
           setPage(result.page);
         }
       } catch (err) {
-        if (!active || controller.signal.aborted) {
-          return;
-        }
-
+        if (!active || controller.signal.aborted) return;
         const message = err instanceof Error ? err.message : 'Failed to load saved books.';
-
         setError(message);
       } finally {
-        if (active) {
-          setIsLoading(false);
-        }
+        if (active) setIsLoading(false);
       }
     };
 
@@ -80,19 +71,15 @@ export default function SavedBooksPage() {
   }, [page, searchQuery]);
 
   const summary = useMemo(() => {
-    if (!totalItems) {
-      return '';
-    }
-
+    if (!totalItems) return '';
     return searchQuery
       ? `${totalItems} saved book${totalItems === 1 ? '' : 's'} match “${searchQuery}”`
-      : `${totalItems} saved book${totalItems === 1 ? '' : 's'} in your account`;
+      : `${totalItems} saved book${totalItems === 1 ? '' : 's'} in your shelf`;
   }, [searchQuery, totalItems]);
 
   const handleRemoveBook = useCallback(
     async (book: BookType) => {
       const confirmed = window.confirm(`Remove “${book.title}” from your saved books?`);
-
       if (!confirmed) return;
 
       const previousBooks = books;
@@ -118,13 +105,10 @@ export default function SavedBooksPage() {
         setBooks(result.books);
         setTotalPages(result.totalPages);
         setTotalItems(result.totalItems);
-
         setError(null);
       } catch (err) {
         setBooks(previousBooks);
-
         const message = err instanceof Error ? err.message : 'Failed to remove the book.';
-
         setError(message);
       } finally {
         setRemovingId(null);
@@ -134,79 +118,54 @@ export default function SavedBooksPage() {
   );
 
   return (
-    <div className="saved-books-page" data-sidebar-open="false">
-      <aside className="saved-books-page__sidebar" aria-label="Primary">
-        <nav className="saved-books-page__nav">
-          <button
-            className="saved-books-page__nav-item"
-            type="button"
-            onClick={() => navigate('/')}
-          >
-            <Home className="icon" size={18} /> Home
-          </button>
-
-          <button
-            className="saved-books-page__nav-item saved-books-page__nav-item--active"
-            type="button"
-          >
-            <Bookmark className="icon" size={18} /> Saved books
-          </button>
-        </nav>
-      </aside>
-
-      <main className="saved-books-page__main">
-        <header className="saved-books-page__header">
-          <div>
-            <p className="saved-books-page__eyebrow">Your shelf</p>
-            <h1 className="saved-books-page__title">Saved books</h1>
-            <p className="saved-books-page__subtitle">
-              Review the books you’ve saved, search your shelf, and remove titles you’re no longer
-              keeping.
-            </p>
+    <div className="editorial-root">
+      <TopBar active="shelf" />
+      <main className="editorial-page">
+        <Reveal as="section" className="section" immediate>
+          <div className="section__head">
+            <div>
+              <span className="section__eyebrow">Your shelf</span>
+              <h1 className="section__title">Saved books</h1>
+            </div>
+            <p className="section__hint">{summary || 'No saved books yet'}</p>
           </div>
 
-          <button className="saved-books-page__back" type="button" onClick={() => navigate('/')}>
-            <Home size={18} /> Back
-          </button>
-        </header>
-
-        <section className="saved-books-page__toolbar" aria-label="Saved books search">
-          <label className="saved-books-page__search">
-            <Search size={18} />
+          <div className="search-pill">
+            <Search className="search-pill__icon" size={18} />
             <input
               type="search"
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
-              placeholder="Search saved books by title or author"
+              placeholder="Search saved books by title or author…"
+              aria-label="Search saved books"
             />
-          </label>
+          </div>
+        </Reveal>
 
-          <p className="saved-books-page__count">{summary || 'No saved books yet'}</p>
-        </section>
-
-        <BookList
-          books={books}
-          emptyState="You haven't saved any books yet"
-          isLoading={isLoading}
-          error={error}
-          loadingLabel="Loading your saved books..."
-          summary={summary || undefined}
-          renderActions={(book) => (
-            <button
-              className="ui-button ui-button--ghost ui-button--danger"
-              type="button"
-              onClick={() => void handleRemoveBook(book)}
-              disabled={removingId === book._id}
-            >
-              <Trash2 size={16} /> {removingId === book._id ? 'Removing…' : 'Remove'}
-            </button>
-          )}
-        />
+        <Reveal as="section" delay={0.1} immediate>
+          <BookList
+            books={books}
+            emptyState="Search Open Library on the home page and save a title to start your shelf."
+            isLoading={isLoading}
+            error={error}
+            loadingLabel="Loading your saved books…"
+            renderActions={(book) => (
+              <button
+                className="ui-button ui-button--ghost ui-button--danger"
+                type="button"
+                onClick={() => void handleRemoveBook(book)}
+                disabled={removingId === book._id}
+              >
+                <Trash2 size={16} /> {removingId === book._id ? 'Removing…' : 'Remove'}
+              </button>
+            )}
+          />
+        </Reveal>
 
         {!isLoading && !error && totalPages > 1 ? (
           <nav className="saved-books-page__pagination" aria-label="Saved books pagination">
             <button
-              className="ui-button ui-button--secondary"
+              className="ui-button ui-button--ghost"
               type="button"
               onClick={() => setPage((current) => Math.max(1, current - 1))}
               disabled={page === 1}
@@ -219,7 +178,7 @@ export default function SavedBooksPage() {
             </p>
 
             <button
-              className="ui-button ui-button--secondary"
+              className="ui-button ui-button--ghost"
               type="button"
               onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
               disabled={page === totalPages}
@@ -228,6 +187,12 @@ export default function SavedBooksPage() {
             </button>
           </nav>
         ) : null}
+
+        <footer className="editorial-footer">
+          <p>
+            <em>bookMoth</em> — a quiet shelf for a loud world
+          </p>
+        </footer>
       </main>
     </div>
   );
