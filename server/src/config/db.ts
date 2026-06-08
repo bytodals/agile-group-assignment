@@ -53,7 +53,15 @@ const connectDB = async (): Promise<void> => {
 };
 
 export const getDBStatus = (): boolean => {
-  return isConnected && mongoose.connection.readyState === 1;
+  const readyState = mongoose.connection.readyState;
+  const status = isConnected && readyState === 1;
+
+  logger.warn(
+    'health',
+    `getDBStatus() → isConnected=${isConnected}, readyState=${readyState}, returning ${status}`,
+  );
+
+  return status;
 };
 
 export const closeDB = async (): Promise<void> => {
