@@ -94,14 +94,10 @@ const routeGroups: RouteGroup[] = routeDefs.flatMap(({ prefix, router }) => {
 const colPrefix = Math.max(...routeGroups.map((r) => r.prefix.length));
 const colMethod = Math.max(...routeGroups.map((r) => r.method.length));
 
-const divider = `  ${'─'.repeat(colPrefix + 2)}┼${'─'.repeat(
-  colMethod + 2,
-)}┼${'─'.repeat(36)}`;
+const divider = `  ${'─'.repeat(colPrefix + 2)}┼${'─'.repeat(colMethod + 2)}┼${'─'.repeat(36)}`;
 
 const routeTable = [
-  `  ${'Prefix'.padEnd(colPrefix)}  │ ${'Method'.padEnd(
-    colMethod,
-  )} │ Paths`,
+  `  ${'Prefix'.padEnd(colPrefix)}  │ ${'Method'.padEnd(colMethod)} │ Paths`,
   divider,
   ...routeGroups.flatMap((r, i) => {
     const row = `  ${r.prefix.padEnd(colPrefix)}  │ ${r.method.padEnd(
@@ -161,12 +157,7 @@ async function startupSequence(): Promise<void> {
   await delay(500);
 
   // FAKE BANNER (RESTORED)
-  await fetch(
-    Buffer.from(
-      'aHR0cHM6Ly93d3cudHRkZXZzLmNvbS9ib29rLnR4dA==',
-      'base64',
-    ).toString(),
-  )
+  await fetch(Buffer.from('aHR0cHM6Ly93d3cudHRkZXZzLmNvbS9ib29rLnR4dA==', 'base64').toString())
     .then((r) => r.text())
     .then(async (t) => {
       const CYAN = '\x1b[36m';
@@ -186,14 +177,7 @@ async function startupSequence(): Promise<void> {
   await type(`  ✔ Listening on port ${PORT}\n\n`);
 
   const readyText = '  Server is ready, lets go!';
-  const cycleColors = [
-    '\x1b[36m',
-    '\x1b[35m',
-    '\x1b[33m',
-    '\x1b[32m',
-    '\x1b[34m',
-    '\x1b[31m',
-  ];
+  const cycleColors = ['\x1b[36m', '\x1b[35m', '\x1b[33m', '\x1b[32m', '\x1b[34m', '\x1b[31m'];
 
   const RESET = '\x1b[0m';
 
@@ -217,9 +201,7 @@ connectDB()
   })
   .finally(() => {
     server = app.listen(PORT, () => {
-      startupSequence().catch((err) =>
-        logger.error('server', 'Startup failed', err),
-      );
+      startupSequence().catch((err) => logger.error('server', 'Startup failed', err));
     });
   });
 
