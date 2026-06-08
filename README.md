@@ -35,8 +35,6 @@ A modern full-stack book discovery and personal library web application. Users c
 
 ## Project Structure
 
-## 📁 Project Structure
-
 ```bash
 agile-group-assignment/
 ├── AnnaBook/                      # React Frontend
