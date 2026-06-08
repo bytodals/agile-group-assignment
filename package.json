@@ -3,9 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev": "concurrently --kill-others-on-fail --names server,client --prefix-colors cyan,magenta \"npm run dev --prefix server\" \"npm run dev --prefix AnnaBook\"",
+    "dev:local": "concurrently --kill-others-on-fail --names server,client --prefix-colors cyan,magenta \"npm run dev:local --prefix server\" \"npm run dev --prefix AnnaBook\""
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.5",
