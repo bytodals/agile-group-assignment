@@ -128,6 +128,9 @@ Keep the design clean, warm, and bookish (earthy tones, good readability)
 Adding a New Token
 
 Add the variable to AnnaBook/src/styles/tokens.css
+
 Document it here (name + purpose)
+
 Test in the app
+
 Notify the team
