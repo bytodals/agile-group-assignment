@@ -1,69 +1,229 @@
-import { useState } from 'react';
-import { Home, Search, Bookmark } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import BookList from '../components/BookList/BookList';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { Search } from 'lucide-react';
+import BookCard from '../components/BookCard/BookCard';
 import OpenLibrarySearchResults from '../components/OpenLibrarySearchResults';
+import CoverImage from '../components/CoverImage/CoverImage';
+import TopBar from '../components/TopBar/TopBar';
+import Reveal from '../components/motion/Reveal';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import {
+  getBooks,
+  getFeaturedBook,
+  getGenres,
+  type DbBook,
+  type FeaturedBook,
+  type GenreCount,
+} from '../services/api';
+
+function Hero({ featured }: { featured: FeaturedBook | null | 'loading' }) {
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 400], [0, prefersReducedMotion ? 0 : -40]);
+
+  if (featured === 'loading') {
+    return (
+      <section className="hero">
+        <div className="hero__skeleton" aria-hidden />
+        <div className="hero__skeleton" aria-hidden />
+      </section>
+    );
+  }
+
+  if (!featured) return null;
+
+  return (
+    <section className="hero" aria-labelledby="hero-title">
+      <motion.div className="hero__cover" style={{ y }}>
+        <CoverImage
+          coverId={featured.coverId}
+          title={featured.title}
+          author={featured.author}
+          size="lg"
+        />
+      </motion.div>
+      <motion.div
+        className="hero__text"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <p className="hero__eyebrow">Book of the month</p>
+        <h1 id="hero-title" className="hero__title">
+          {featured.title}
+        </h1>
+        {featured.author && <p className="hero__author">by {featured.author}</p>}
+        <hr className="hero__rule" />
+        {featured.description && <p className="hero__desc">{featured.description}</p>}
+      </motion.div>
+    </section>
+  );
+}
+
+function GenresSection({ genres }: { genres: GenreCount[] }) {
+  if (genres.length === 0) return null;
+  return (
+    <Reveal as="section" className="section">
+      <div className="section__head">
+        <div>
+          <span className="section__eyebrow">Browse</span>
+          <h2 className="section__title">By genre</h2>
+        </div>
+        <p className="section__hint">Tap a genre to filter your shelf</p>
+      </div>
+      <motion.ul
+        className="chips"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-10%' }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.06 } },
+        }}
+      >
+        {genres.map((g) => (
+          <motion.li
+            key={g.genre}
+            variants={{
+              hidden: { opacity: 0, y: 12 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Link className="chip" to={`/?genre=${encodeURIComponent(g.genre)}#new-arrivals`}>
+              {g.genre}
+              <span className="chip__count">{g.count}</span>
+            </Link>
+          </motion.li>
+        ))}
+      </motion.ul>
+    </Reveal>
+  );
+}
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const activeGenre = searchParams.get('genre');
+
+  const [featured, setFeatured] = useState<FeaturedBook | null | 'loading'>('loading');
+  const [genres, setGenres] = useState<GenreCount[]>([]);
+  const [books, setBooks] = useState<DbBook[]>([]);
+  const [booksLoading, setBooksLoading] = useState(true);
+
+  useEffect(() => {
+    getFeaturedBook()
+      .then((b) => setFeatured(b))
+      .catch(() => setFeatured(null));
+  }, []);
+
+  useEffect(() => {
+    getGenres()
+      .then(setGenres)
+      .catch(() => setGenres([]));
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    getBooks()
+      .then((all) => {
+        if (!active) return;
+        const ordered = [...all].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+        setBooks(ordered);
+      })
+      .catch(() => {
+        if (active) setBooks([]);
+      })
+      .finally(() => {
+        if (active) setBooksLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const visibleBooks = useMemo(() => {
+    if (!activeGenre) return books.slice(0, 8);
+    return books
+      .filter((b) => (b.genre ?? '').toLowerCase() === activeGenre.toLowerCase())
+      .slice(0, 8);
+  }, [books, activeGenre]);
 
   return (
-    <div className="hp-root" data-sidebar-open="false">
-      <aside className="hp-sidebar" aria-hidden>
-        <nav className="hp-side-nav">
-          <button className="hp-side-item">
-            <Home className="icon" size={18} /> Home
-          </button>
-          <button className="hp-side-item">
-            <Search className="icon" size={18} /> Search
-          </button>
-          <button className="hp-side-item" type="button" onClick={() => navigate('/saved-books')}>
-            <Bookmark className="icon" size={18} /> Shelf
-          </button>
-        </nav>
-      </aside>
-      <main className="hp-main">
-        <header className="hp-header">
-          <button className="hp-menu" aria-label="open menu">
-            <Home size={20} />
-          </button>
-          <h1 className="hp-brand">bookMoth</h1>
-        </header>
-        <section className="hp-hero">
-          <h2 className="hp-hero-title">Echoes of the Old World</h2>
-          <span className="hp-hero-badge">Book of the month</span>
-          <p className="hp-hero-desc">
-            A sweeping narrative that redefines our understanding of lost civilizations.
-          </p>
-        </section>
-        <div className="hp-search">
-          <div className="hp-search-box">
+    <div className="editorial-root">
+      <TopBar active="home" />
+      <main className="editorial-page">
+        <Hero featured={featured} />
+
+        <Reveal as="section" className="section" delay={0.05}>
+          <div className="section__head">
+            <div>
+              <span className="section__eyebrow">Discover</span>
+              <h2 className="section__title">Search the catalogue</h2>
+            </div>
+          </div>
+          <div className="search-pill">
+            <Search className="search-pill__icon" size={18} />
             <input
-              placeholder="Search by title, author, or ISBN..."
+              type="search"
+              placeholder="Search by title, author, or ISBN…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search Open Library"
             />
-            <button aria-label="search">
-              <Search size={18} />
-            </button>
           </div>
           <OpenLibrarySearchResults query={searchQuery} />
-        </div>
-        <section className="hp-section">
-          <h2 className="hp-section-title">New Arrivals</h2>
-          <div className="hp-grid hp-grid-2">
-            <BookList />
+        </Reveal>
+
+        <Reveal as="section" className="section" delay={0.1}>
+          <div className="section__head" id="new-arrivals">
+            <div>
+              <span className="section__eyebrow">From your shelf</span>
+              <h2 className="section__title">
+                {activeGenre ? `Genre · ${activeGenre}` : 'Recently added'}
+              </h2>
+            </div>
+            {activeGenre && (
+              <Link className="section__hint" to="/">
+                Clear filter
+              </Link>
+            )}
           </div>
-        </section>
-        <section className="hp-section">
-          <h2 className="hp-section-title">Popular Genres</h2>
-          <div className="hp-grid hp-grid-3">
-            <div className="hp-card">Mystery</div>
-            <div className="hp-card">Sci-Fi</div>
-            <div className="hp-card">History &amp; Lore</div>
-          </div>
-        </section>
+          {booksLoading ? (
+            <LoadingSpinner />
+          ) : visibleBooks.length === 0 ? (
+            <div className="empty-state">
+              <h2>{activeGenre ? 'Nothing here yet' : 'Your shelf is waiting'}</h2>
+              <p>
+                {activeGenre
+                  ? `No saved books match "${activeGenre}". Try another genre or clear the filter.`
+                  : 'Search Open Library above and save your first title — it will appear here.'}
+              </p>
+            </div>
+          ) : (
+            <ul className="poster-grid">
+              {visibleBooks.map((book) => (
+                <li key={book._id}>
+                  <BookCard
+                    id={book._id}
+                    title={book.title}
+                    author={book.author?.name ?? 'Unknown author'}
+                    coverId={book.coverId}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </Reveal>
+
+        <GenresSection genres={genres} />
+
+        <footer className="editorial-footer">
+          <p>
+            <em>bookMoth</em> — a quiet shelf for a loud world
+          </p>
+        </footer>
       </main>
     </div>
   );

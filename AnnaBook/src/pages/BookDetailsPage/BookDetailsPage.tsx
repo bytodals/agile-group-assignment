@@ -1,9 +1,13 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { ChevronLeft } from 'lucide-react';
 import type { BookType } from '../../types';
 import { getBookById } from '../../services/api';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import ErrorMessage from '../../components/ui/ErrorMessage';
+import CoverImage from '../../components/CoverImage/CoverImage';
+import TopBar from '../../components/TopBar/TopBar';
+import Reveal from '../../components/motion/Reveal';
 
 export default function BookDetailsPage() {
   const { id } = useParams();
@@ -52,46 +56,56 @@ export default function BookDetailsPage() {
       active = false;
     };
   }, [id]);
-  if (loading)
-    return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <LoadingSpinner />
-      </div>
-    );
-  if (error || !book) {
-    return (
-      <section className="book-details">
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          Back
-        </button>
-        <ErrorMessage variant="block" title="Book not found">
-          {error ?? 'The book you are looking for could not be found.'}
-        </ErrorMessage>
-      </section>
-    );
-  }
 
   return (
-    <section className="book-details-section">
-      <button className="book-details-back-btn" onClick={() => navigate(-1)}>
-        Back
-      </button>
-      <section className="book-details-card">
-        <img src="https://placehold.co/200x300" alt={book.title} className="book-details-img" />
-        <div className="book-details-content">
-          <h2>{book.title}</h2>
+    <div className="editorial-root">
+      <TopBar />
+      <main className="editorial-page">
+        <button className="details-back" type="button" onClick={() => navigate(-1)}>
+          <ChevronLeft size={16} /> Back
+        </button>
+
+        {loading ? (
+          <LoadingSpinner size="large" label="Loading book…" />
+        ) : error || !book ? (
+          <ErrorMessage variant="block" title="Book not found">
+            {error ?? 'The book you are looking for could not be found.'}
+          </ErrorMessage>
+        ) : (
+          <Reveal as="section" className="details-layout" immediate>
+            <div className="details-cover">
+              <CoverImage
+                coverId={book.coverId}
+                title={book.title}
+                author={book.author?.name}
+                size="lg"
+              />
+            </div>
+            <div className="details-text">
+              <h1 className="details-title">{book.title}</h1>
+              {book.author?.name && <p className="details-author">by {book.author.name}</p>}
+              <hr className="details-rule" />
+              <div className="details-meta">
+                {book.genre && <span className="details-pill">{book.genre}</span>}
+                <span
+                  className={`details-pill ${
+                    book.available ? 'details-pill--available' : 'details-pill--unavailable'
+                  }`}
+                >
+                  {book.available ? 'Available' : 'Checked out'}
+                </span>
+                {book.favorite && <span className="details-pill">★ Saved</span>}
+              </div>
+            </div>
+          </Reveal>
+        )}
+
+        <footer className="editorial-footer">
           <p>
-            by <span className="book-details-author-link">{book.author.name}</span>
+            <em>bookMoth</em> — a quiet shelf for a loud world
           </p>
-        </div>
-      </section>
-    </section>
+        </footer>
+      </main>
+    </div>
   );
 }

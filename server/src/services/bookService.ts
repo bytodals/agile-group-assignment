@@ -1,5 +1,74 @@
 import Book, { IBook } from '../models/Book.js';
 import Author from '../models/Author.js';
+import { fetchTrending, fetchWorkDescription } from './openLibraryService.js';
+
+export interface FeaturedBook {
+  olKey: string;
+  title: string;
+  author?: string;
+  coverId?: number;
+  description?: string;
+}
+
+let featuredCache: { date: string; book: FeaturedBook } | null = null;
+
+function todayKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+export const getFeaturedBook = async (): Promise<FeaturedBook | null> => {
+  const today = todayKey();
+  if (featuredCache && featuredCache.date === today) {
+    return featuredCache.book;
+  }
+
+  try {
+    const trending = await fetchTrending('monthly');
+    if (trending.length > 0) {
+      const pick = trending[Math.floor(Math.random() * trending.length)];
+      const description = await fetchWorkDescription(pick.olKey);
+      const book: FeaturedBook = {
+        olKey: pick.olKey,
+        title: pick.title,
+        author: pick.authorName,
+        coverId: pick.coverId,
+        description,
+      };
+      featuredCache = { date: today, book };
+      return book;
+    }
+  } catch {
+    // fall through to DB fallback
+  }
+
+  const fallbackCount = await Book.countDocuments({ favorite: true, coverId: { $exists: true } });
+  if (fallbackCount === 0) return null;
+  const skip = Math.floor(Math.random() * fallbackCount);
+  const doc = await Book.findOne({ favorite: true, coverId: { $exists: true } })
+    .skip(skip)
+    .populate<{ author: { name: string } }>('author');
+  if (!doc) return null;
+  const book: FeaturedBook = {
+    olKey: doc.olKey ?? '',
+    title: doc.title,
+    author: doc.author?.name,
+    coverId: doc.coverId,
+  };
+  featuredCache = { date: today, book };
+  return book;
+};
+
+export const getGenresWithCounts = async (
+  limit = 6,
+): Promise<{ genre: string; count: number }[]> => {
+  const results = await Book.aggregate<{ _id: string; count: number }>([
+    { $match: { genre: { $exists: true, $nin: [null, ''] } } },
+    { $group: { _id: '$genre', count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+    { $limit: limit },
+  ]);
+  return results.map((r) => ({ genre: r._id, count: r.count }));
+};
 
 export const getAllBooks = async (sortBy = 'title'): Promise<IBook[]> => {
   return Book.find()
@@ -107,6 +176,7 @@ export const addToFavorites = async (data: {
   authorOlKey?: string;
   authorName?: string;
   genre?: string;
+  coverId?: number;
 }): Promise<IBook> => {
   let authorId;
   if (data.authorName) {
@@ -117,11 +187,20 @@ export const addToFavorites = async (data: {
     );
     authorId = author._id;
   }
-  const book = await Book.findOneAndUpdate(
-    { olKey: data.olKey },
-    { title: data.title, genre: data.genre, author: authorId, olKey: data.olKey, favorite: true },
-    { upsert: true, new: true },
-  );
+  const update: Record<string, unknown> = {
+    title: data.title,
+    genre: data.genre,
+    author: authorId,
+    olKey: data.olKey,
+    favorite: true,
+  };
+  if (typeof data.coverId === 'number') {
+    update.coverId = data.coverId;
+  }
+  const book = await Book.findOneAndUpdate({ olKey: data.olKey }, update, {
+    upsert: true,
+    new: true,
+  });
   return book.populate('author');
 };
 

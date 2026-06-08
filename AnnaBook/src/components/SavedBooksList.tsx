@@ -1,7 +1,10 @@
 import { BookmarkCheck, BookOpen, CalendarClock, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 import type { SavedBooksListProps } from '../types';
 import LoadingSpinner from './ui/LoadingSpinner';
 import ErrorMessage from './ui/ErrorMessage';
+import CoverImage from './CoverImage/CoverImage';
 
 export default function BookList({
   books,
@@ -32,10 +35,11 @@ export default function BookList({
 
   if (books.length === 0) {
     return (
-      <section className="book-list__state book-list__state--empty">
+      <div className="empty-state">
         <BookmarkCheck size={28} />
+        <h2>Your shelf is waiting</h2>
         <p>{emptyState}</p>
-      </section>
+      </div>
     );
   }
 
@@ -44,8 +48,31 @@ export default function BookList({
       {summary ? <p className="book-list__summary">{summary}</p> : null}
 
       <ul className="book-list__grid" aria-label="Book list">
-        {books.map((book) => (
-          <li key={book._id} className="book-card">
+        {books.map((book, idx) => (
+          <motion.li
+            key={book._id}
+            className="book-card"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: Math.min(idx * 0.04, 0.3),
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
+            <Link
+              to={`/books/${book._id}`}
+              className="book-card__cover"
+              aria-label={`Open details for ${book.title}`}
+            >
+              <CoverImage
+                coverId={book.coverId}
+                title={book.title}
+                author={book.author?.name}
+                size="md"
+              />
+            </Link>
+
             <div className="book-card__header">
               <div>
                 <p className="book-card__kicker">
@@ -78,7 +105,7 @@ export default function BookList({
             </dl>
 
             {renderActions ? <div className="book-card__actions">{renderActions(book)}</div> : null}
-          </li>
+          </motion.li>
         ))}
       </ul>
     </div>

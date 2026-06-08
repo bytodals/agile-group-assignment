@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { searchOpenLibraryBooks, addBookToShelf, type OLBook } from '../services/api';
 import LoadingSpinner from './ui/LoadingSpinner';
 import ErrorMessage from './ui/ErrorMessage';
+import CoverImage from './CoverImage/CoverImage';
 import type { OpenLibrarySearchResultsProps } from '../types';
 
 export default function OpenLibrarySearchResults({ query }: OpenLibrarySearchResultsProps) {
@@ -12,14 +14,16 @@ export default function OpenLibrarySearchResults({ query }: OpenLibrarySearchRes
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
-      if (!query.trim()) {
+      const trimmed = query.trim();
+      if (trimmed.length < 2) {
         setResults([]);
+        setError(false);
         return;
       }
       try {
         setLoading(true);
         setError(false);
-        setResults(await searchOpenLibraryBooks(query));
+        setResults(await searchOpenLibraryBooks(trimmed));
       } catch {
         setError(true);
       } finally {
@@ -39,37 +43,52 @@ export default function OpenLibrarySearchResults({ query }: OpenLibrarySearchRes
     }
   }
 
-  if (!query.trim()) return null;
+  if (query.trim().length < 2) return null;
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage>Book-search failed.</ErrorMessage>;
   if (results.length === 0)
     return <p className="hp-search-feedback">No books found for &quot;{query}&quot;.</p>;
 
   return (
-    <div className="hp-grid hp-grid-2 hp-search-results">
-      {results.map((book) => (
-        <article key={book.olKey} className="hp-card">
-          <img
-            src={
-              book.coverId
-                ? `https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`
-                : 'https://placehold.co/200x300'
-            }
-            alt={book.title}
-          />
-          <div>
-            <h3>{book.title}</h3>
-            {book.authorName && <p>{book.authorName}</p>}
-            <button
-              className="hp-add-btn"
-              onClick={() => handleAddToShelf(book)}
-              disabled={added.has(book.olKey)}
-            >
-              {added.has(book.olKey) ? 'Added ✓' : 'Add to shelf'}
-            </button>
-          </div>
-        </article>
-      ))}
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={query}
+        className="ol-results"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -4 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {results.map((book) => (
+          <motion.article
+            key={book.olKey}
+            className="ol-result"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="ol-result__cover">
+              <CoverImage
+                coverId={book.coverId}
+                title={book.title}
+                author={book.authorName}
+                size="sm"
+              />
+            </div>
+            <div className="ol-result__body">
+              <h3 className="ol-result__title">{book.title}</h3>
+              {book.authorName && <p className="ol-result__author">{book.authorName}</p>}
+              <button
+                className="ol-result__add"
+                onClick={() => handleAddToShelf(book)}
+                disabled={added.has(book.olKey)}
+              >
+                {added.has(book.olKey) ? 'Added ✓' : 'Add to shelf'}
+              </button>
+            </div>
+          </motion.article>
+        ))}
+      </motion.div>
+    </AnimatePresence>
   );
 }

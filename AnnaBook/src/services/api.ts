@@ -17,10 +17,24 @@ export type DbBook = {
     _id: string;
     name: string;
   };
+  coverId?: number;
   available: boolean;
   favorite?: boolean;
   createdAt: string;
   updatedAt: string;
+};
+
+export type FeaturedBook = {
+  olKey: string;
+  title: string;
+  author?: string;
+  coverId?: number;
+  description?: string;
+};
+
+export type GenreCount = {
+  genre: string;
+  count: number;
 };
 
 type SavedBooksQuery = {
@@ -60,6 +74,22 @@ export async function getBooks(): Promise<DbBook[]> {
   const response = await fetch('/api/books');
 
   return parseJsonResponse<DbBook[]>(response, 'Failed to fetch books');
+}
+
+export async function getFeaturedBook(): Promise<FeaturedBook | null> {
+  const response = await fetch('/api/books/featured');
+
+  if (response.status === 503) {
+    return null;
+  }
+
+  return parseJsonResponse<FeaturedBook>(response, 'Failed to fetch featured book');
+}
+
+export async function getGenres(): Promise<GenreCount[]> {
+  const response = await fetch('/api/books/genres');
+
+  return parseJsonResponse<GenreCount[]>(response, 'Failed to fetch genres');
 }
 
 export async function getBookById(id: string): Promise<DbBook | null> {

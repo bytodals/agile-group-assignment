@@ -17,7 +17,8 @@
     "seed": "tsx src/seed.ts",
     "seed:local": "cross-env USE_LOCAL_DB=true tsx src/seed.ts",
     "export": "tsx src/export.ts",
-    "dev:local": "cross-env USE_LOCAL_DB=true nodemon --exec tsx src/app.ts"
+    "dev:local": "cross-env USE_LOCAL_DB=true nodemon --exec tsx src/app.ts",
+    "backfill:covers": "tsx src/scripts/backfillCovers.ts"
   },
   "keywords": [],
   "author": "Ida, Thelma, Johanna, Tom, Alexander",
