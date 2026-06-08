@@ -1,17 +1,36 @@
 import { Router } from 'express';
+import mongoose from 'mongoose';
 
 const router = Router();
 
-console.log('🔥 HEALTH ROUTE v2 - ALWAYS 503 🔥');
+router.get('/', async (_req, res) => {
+  const state = mongoose.connection.readyState;
 
-router.get('/', (_req, res) => {
-  console.log('🧪 HEALTH ENDPOINT CALLED - FORCED 503');
+  // 1 = connected
+  if (state !== 1) {
+    return res.status(503).json({
+      status: 'error',
+      timestamp: new Date().toISOString(),
+      message: 'Database unavailable',
+    });
+  }
 
-  return res.status(503).json({
-    status: 'error',
-    timestamp: new Date().toISOString(),
-    message: 'Database unavailable - FORCED TEST',
-  });
+  try {
+    await mongoose.connection.db?.admin().ping();
+
+    return res.status(200).json({
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error(err);
+
+    return res.status(503).json({
+      status: 'error',
+      timestamp: new Date().toISOString(),
+      message: 'Database unavailable',
+    });
+  }
 });
 
 export default router;
