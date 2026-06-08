@@ -33,23 +33,28 @@ A modern full-stack book discovery and personal library web application. Users c
 - TypeScript types
 - Prettier + ESLint + Husky
 
-## 📁 Project Structure
-agile-group-assignment/
-├── AnnaBook/              # React frontend
+## Project Structure
+├── AnnaBook/                  # React frontend
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
-│   │   └── styles/
+│   │   ├── styles/
+│   │   └── ...
 │   └── package.json
-├── server/                # Express backend
+├── server/                    # Express backend
 │   ├── src/
 │   │   ├── routes/
 │   │   ├── models/
+│   │   ├── controllers/
 │   │   └── ...
 │   └── package.json
-├── shared/types/          # Shared TypeScript definitions
+├── shared/types/              # Shared TypeScript definitions
+├── .github/                   # GitHub templates & workflows
+├── .husky/                    # Git hooks
 ├── DESIGN.md
-└── README.md
+├── README.md
+├── package.json               # Root scripts (concurrently, etc.)
+└── ...
 
 ##  Getting Started
 
