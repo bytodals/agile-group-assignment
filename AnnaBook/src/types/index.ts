@@ -5,6 +5,7 @@ export type BookType = {
   title: string;
   genre?: string;
   author: AuthorType;
+  coverId?: number;
   available: boolean;
   favorite?: boolean;
 };
