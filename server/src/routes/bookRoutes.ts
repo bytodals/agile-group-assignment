@@ -5,6 +5,8 @@ import {
   searchBooks,
   getFavoriteBooks,
   getBooksByAuthor,
+  getFeatured,
+  getGenres,
   createBook,
   updateAvailability,
   updateFavorite,
@@ -15,6 +17,8 @@ import {
 const router = Router();
 
 router.get('/', getBooks);
+router.get('/featured', getFeatured);
+router.get('/genres', getGenres);
 router.get('/search', searchBooks);
 router.get('/favorites', getFavoriteBooks);
 router.get('/author/:authorId', getBooksByAuthor);
