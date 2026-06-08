@@ -49,9 +49,25 @@
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-display: clamp(2.75rem, 6vw, 5.25rem);
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.18em;
 
   --app-bg: var(--color-surface);
   --shadow: rgba(0,0,0,0.06) 0 8px 20px -8px;
+  --shadow-card: 0 12px 32px -16px rgba(15, 23, 42, 0.18);
+  --shadow-card-hover: 0 24px 48px -20px rgba(15, 23, 42, 0.28);
+  --shadow-hero: 0 40px 80px -30px rgba(15, 23, 42, 0.35);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 200ms;
+  --duration-base: 450ms;
+
+  --texture-paper: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 
   /* Spinner sizes */
   --spinner-size-small: 20px;
