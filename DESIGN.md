@@ -1,6 +1,4 @@
-Got it! Here's an enhanced and more complete version of the DESIGN.md with additional useful sections.
-Updated & Expanded DESIGN.md
-Markdown# Design System – AnnaBook (bookMoth)
+# Design System – AnnaBook (bookMoth)
 
 This document serves as the **single source of truth** for the visual design system of the project.
 
