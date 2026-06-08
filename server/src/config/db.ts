@@ -49,9 +49,6 @@ const connectDB = async (): Promise<void> => {
     isConnected = false;
 
     logger.error('db', `Failed to connect to ${label} ✖`, error);
-
-    // IMPORTANT: do NOT crash server
-    // Let /health handle the failure instead
   }
 };
 

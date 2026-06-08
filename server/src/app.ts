@@ -65,7 +65,7 @@ routeDefs.forEach(({ prefix, router }) => app.use(prefix, router));
 
 app.use(errorHandler);
 
-/* ─── Route table (RESTORED EXACT STYLE) ─────────────────── */
+/* ─── Route table  ─────────────────── */
 
 type RouteLayer = {
   route?: { path: string; methods: Record<string, boolean> };
@@ -109,7 +109,7 @@ const routeTable = [
   }),
 ];
 
-/* ─── Startup helpers (UNCHANGED LOOK) ───────────────────── */
+/* ─── Startup helpers  ───────────────────── */
 
 const getLocalIP = (): string => {
   const interfaces = os.networkInterfaces();
@@ -133,7 +133,7 @@ const type = async (text: string, ms = 15): Promise<void> => {
   }
 };
 
-/* ─── Startup sequence (EXACT ORIGINAL FEEL) ─────────────── */
+/* ─── Startup sequence  ─────────────── */
 
 async function startupSequence(): Promise<void> {
   const ip = getLocalIP();
@@ -156,7 +156,6 @@ async function startupSequence(): Promise<void> {
 
   await delay(500);
 
-  // FAKE BANNER (RESTORED)
   await fetch(Buffer.from('aHR0cHM6Ly93d3cudHRkZXZzLmNvbS9ib29rLnR4dA==', 'base64').toString())
     .then((r) => r.text())
     .then(async (t) => {
@@ -191,7 +190,7 @@ async function startupSequence(): Promise<void> {
   process.stdout.write(`\r${readyText}${RESET}\n\n`);
 }
 
-/* ─── DB + server boot (SAFE FIX ONLY) ───────────────────── */
+/* ─── DB + server boot ───────────────────── */
 
 let server: ReturnType<typeof app.listen>;
 
