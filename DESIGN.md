@@ -1,4 +1,4 @@
-# Design System – AnnaBook (bookMoth)
+# Design System – bookMoth
 
 This document serves as the **single source of truth** for the visual design system of the project.
 
