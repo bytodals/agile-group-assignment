@@ -90,7 +90,7 @@ tsxconst style = {
 };
 ```
 
-#Accessibility Guidelines
+# Accessibility Guidelines
 
 Maintain minimum contrast ratio of 4.5:1 for normal text
 All interactive elements must have visible focus states
@@ -99,7 +99,7 @@ Provide meaningful alt text for images
 Ensure sufficient touch target size (min 44px)
 
 
-#Icons
+# Icons
 
 Using Lucide React icon library
 Icon size default: 24px
@@ -107,7 +107,7 @@ Prefer strokeWidth={2} for consistency
 Color: inherit from parent or use --color-text
 
 
-#Animation & Motion
+# Animation & Motion
 
 Use subtle transitions (duration 200–300ms)
 Prefer ease-out or cubic-bezier(0.4, 0, 0.2, 1)
@@ -116,7 +116,7 @@ Respect prefers-reduced-motion media query
 Example:
 CSStransition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-#Guidelines for the Team
+# Guidelines for the Team
 
 Additive changes preferred — add new tokens instead of modifying/removing old ones
 Token names should be semantic (purpose-based)
@@ -125,7 +125,7 @@ All code comments in the project must be written in English
 Keep the design clean, warm, and bookish (earthy tones, good readability)
 
 
-#Adding a New Token
+# Adding a New Token
 
 Add the variable to AnnaBook/src/styles/tokens.css
 
