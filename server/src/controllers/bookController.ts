@@ -7,6 +7,20 @@ export const getBooks = asyncHandler(async (req, res) => {
   res.json(books);
 });
 
+export const getFeatured = asyncHandler(async (_req, res) => {
+  const book = await bookService.getFeaturedBook();
+  if (!book) {
+    res.status(503).json({ message: 'No featured book available' });
+    return;
+  }
+  res.json(book);
+});
+
+export const getGenres = asyncHandler(async (_req, res) => {
+  const genres = await bookService.getGenresWithCounts();
+  res.json(genres);
+});
+
 export const getBook = asyncHandler(async (req, res) => {
   const book = await bookService.getBookById(String(req.params.id));
   if (!book) {
@@ -59,18 +73,26 @@ export const updateFavorite = asyncHandler(async (req, res) => {
 });
 
 export const addToFavorites = asyncHandler(async (req, res) => {
-  const { olKey, title, authorOlKey, authorName, genre } = req.body as {
+  const { olKey, title, authorOlKey, authorName, genre, coverId } = req.body as {
     olKey: string;
     title: string;
     authorOlKey?: string;
     authorName?: string;
     genre?: string;
+    coverId?: number;
   };
   if (!olKey || !title) {
     res.status(400).json({ message: '"olKey" and "title" are required' });
     return;
   }
-  const book = await bookService.addToFavorites({ olKey, title, authorOlKey, authorName, genre });
+  const book = await bookService.addToFavorites({
+    olKey,
+    title,
+    authorOlKey,
+    authorName,
+    genre,
+    coverId,
+  });
   res.status(201).json(book);
 });
 
